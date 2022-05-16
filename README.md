@@ -1,4 +1,4 @@
-# GoodHabitsServer環境構築
+# GoodHabitsServer
 
 ## 環境構築
 1. 事前にjava17のパスを通す。

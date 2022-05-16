@@ -117,6 +117,9 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>${jib.version}</version>
                 <configuration>
+                     <from>
+                        <image>amazoncorretto:17-al2-full</image>
+                    </from>
                     <to>
                         <image>goodhabits/server</image>
                     </to>
