@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- デフォルト設定読み込み -->
+    <include
+            resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include
+            resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!--ローカル環境用設定 -->
+    <springProfile name="local">
+
+        <!-- 開発範囲をデバッグレベルにしファイルに出力したい場合 -->
+        <logger name="jp.co.gh" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <!-- ルートのログ出力設定 -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!--商用環境用設定 -->
+    <springProfile name="pro">
+
+        <!-- 開発範囲をデバッグレベルにしファイルに出力したい場合 -->
+        <logger name="jp.co.gh" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <!-- ルートのログ出力設定 -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+
+    </springProfile>
+</configuration>

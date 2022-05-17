@@ -117,12 +117,16 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>${jib.version}</version>
                 <configuration>
-                     <from>
+                    <from>
                         <image>amazoncorretto:17-al2-full</image>
                     </from>
                     <to>
                         <image>goodhabits/server</image>
                     </to>
+                    <container>
+                        <mainClass>jp.co.gh.App</mainClass>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
                 </configuration>
             </plugin>
             <plugin>
