@@ -119,6 +119,7 @@ ALTER TABLE
   public.account OWNER TO ghuser;
 
 CREATE TABLE IF NOT EXISTS public.roles (
+  id SMALLINT PRIMARY KEY,
   role_label VARCHAR(30),
   role_value VARCHAR(30)
 );
@@ -218,6 +219,7 @@ COMMENT ON COLUMN public.payment_job_history.planned_habit_id IS '計画済み�
 COMMENT ON COLUMN public.payment_job_history.executed_time IS 'ジョブが実行された日時。';
 
 CREATE TABLE IF NOT EXISTS public.margin_time (
+  id SMALLINT PRIMARY KEY,
   completed_margin INTERVAL NOT NULL,
   cancel_margin INTERVAL NOT NULL
 );
@@ -232,6 +234,7 @@ ALTER TABLE
   public.margin_time OWNER TO ghuser;
 
 CREATE TABLE IF NOT EXISTS public.maintenance_plan (
+  id SMALLSERIAL PRIMARY KEY,
   start_time TIMESTAMPTZ NOT NULL,
   end_time TIMESTAMPTZ NOT NULL
 );
