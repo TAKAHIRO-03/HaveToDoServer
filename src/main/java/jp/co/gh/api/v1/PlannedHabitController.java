@@ -10,6 +10,7 @@ import jp.co.gh.api.payload.response.PlannedHabitResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -41,10 +42,10 @@ public class PlannedHabitController {
             @ApiResponse(code = 404, message = "習慣", response = ApiErrorResponse.class),
             @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<PlannedHabitResponse> get(
+    public Mono<ResponseEntity<PlannedHabitResponse>> get(
             @ApiParam(required = true, value = "取得対象となるID")
             @PositiveOrZero @PathVariable final Long id) {
-        return Mono.empty();
+        return Mono.just(ResponseEntity.ok(null));
     }
 
     /**
@@ -61,8 +62,8 @@ public class PlannedHabitController {
             @ApiResponse(code = 404, message = "計画済みの習慣が見つからなかった時", response = ApiErrorResponse.class),
             @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<List<PlannedHabitResponse>> getAll(@PageableDefault Pageable page) {
-        return Mono.empty();
+    public Mono<ResponseEntity<List<PlannedHabitResponse>>> getAll(@PageableDefault Pageable page) {
+        return Mono.just(ResponseEntity.ok(null));
     }
 
     /**
@@ -79,8 +80,8 @@ public class PlannedHabitController {
             @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
             @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<Void> create(@Valid @RequestBody final PlannedHabitRequest req) {
-        return Mono.empty();
+    public Mono<ResponseEntity<Void>> create(@Valid @RequestBody final PlannedHabitRequest req) {
+        return Mono.just(ResponseEntity.created(null).build());
     }
 
     /**
@@ -98,12 +99,12 @@ public class PlannedHabitController {
             @ApiResponse(code = 404, message = "計画済みの習慣が見つからない", response = ApiErrorResponse.class),
             @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<Void> delete(
+    public Mono<ResponseEntity<Void>> delete(
             @ApiParam(required = true, value = "削除対象となるID")
             @PositiveOrZero @PathVariable Long id,
             @ApiParam(required = true, value = "リピートされたものを削除するか")
             @RequestParam boolean repeatDeleteFlg) {
-        return Mono.empty();
+        return Mono.just(ResponseEntity.noContent().build());
     }
 
 }

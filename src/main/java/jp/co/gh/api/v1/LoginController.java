@@ -7,6 +7,7 @@ import jp.co.gh.api.payload.request.LoginRequest;
 import jp.co.gh.api.payload.response.ApiErrorResponse;
 import jp.co.gh.api.payload.response.LoginResponse;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class LoginController {
             @ApiResponse(code = 200, message = "ログイン成功。", response = LoginResponse.class),
             @ApiResponse(code = 401, message = "検証に失敗、ユーザーが存在しない。", response = ApiErrorResponse.class)
     })
-    public Mono<LoginResponse> login(@RequestBody final LoginRequest loginReq) {
-        return Mono.empty();
+    public Mono<ResponseEntity<LoginResponse>> login(@RequestBody final LoginRequest loginReq) {
+        return Mono.just(ResponseEntity.ok(null));
     }
 }

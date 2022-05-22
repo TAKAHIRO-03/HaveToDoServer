@@ -26,7 +26,7 @@ public class Account implements Serializable {
     private String roles;
 
     @Column(name = "is_locked")
-    private Boolean isLocked;
+    private boolean isLocked;
 
     @ManyToOne
     @JoinColumn(name = "timezones_name")

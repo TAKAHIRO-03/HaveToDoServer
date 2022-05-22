@@ -1,6 +1,7 @@
 package jp.co.gh.api.payload.request;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -45,5 +46,21 @@ public record PlannedHabitRequest(
         @ApiModelProperty(value = "いつまでリピートするかの最後の日付", example = "2015-12-31")
         Date repeatEndTime
 ) {
-    //TODO repeatCalendarFlgがtrueの時にrepeatCalendarやrepeatEndTimeがNULLはバリデーションの実装必要あり
+
+    @AssertTrue
+    public boolean isRepeatCalendarNotEmpty() {
+        if (!this.isRepeat/* when is "isRepeat" false, return true */) {
+            return true;
+        }
+        return !CollectionUtils.isEmpty(this.repeatCalendar);
+    }
+
+    @AssertTrue
+    public boolean isRepeatEndTimeNotNull() {
+        if (!this.isRepeat/* when is "isRepeat" false, return true */) {
+            return true;
+        }
+        return Objects.nonNull(this.repeatEndTime);
+    }
+
 }

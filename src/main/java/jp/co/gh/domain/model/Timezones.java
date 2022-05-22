@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Duration;
 
 @Data
 @Entity
@@ -18,7 +19,7 @@ public class Timezones implements Serializable {
     private String abbrev;
 
     @Column(name = "utc_offset")
-    private java.time.Duration utcOffset;
+    private Duration utcOffset;
 
     @Column(name = "is_dst")
     private Boolean isDst;
