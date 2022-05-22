@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 /**
- * ログイン処理のリクエストボディを定義するクラス
+ * ログイン処理のリクエストボディ
  */
 public record LoginRequest(
         @Email
