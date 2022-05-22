@@ -32,4 +32,7 @@ public class PlannedHabit implements Serializable {
 
     @Column(name = "cost")
     private BigDecimal cost;
+
+    @Column(name = "is_repeat")
+    private boolean isRepeat;
 }
