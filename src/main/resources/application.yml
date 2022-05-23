@@ -1,0 +1,11 @@
+springfox: #swagger default
+  documentation:
+    enabled: false
+management: #actuator default
+  endpoints:
+    enabled-by-default: false
+spring:
+  application:
+    name: goodhabits #app name
+  profiles:
+    active: ${PROFILE:local} #profile

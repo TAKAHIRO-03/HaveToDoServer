@@ -1,0 +1,27 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://rdb-ctr:5432/goodhabits
+    username: ghuser
+    password: ghpass
+  flyway:
+    url: jdbc:postgresql://rdb-ctr:5432/goodhabits
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}
+    baseline-on-migrate: true
+    locations: classpath:/db/migration/local
+management: #actuator
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: '*'
+  metrics: #metrics
+    #    export:
+    #      statsd:
+    #        enabled: false
+    datadog:
+      #      enabled: true
+      api-key: ${DD_API_KEY}
+springfox: #swagger
+  documentation:
+    enabled: true
