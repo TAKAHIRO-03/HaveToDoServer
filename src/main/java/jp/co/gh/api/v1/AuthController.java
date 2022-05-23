@@ -8,18 +8,15 @@ import jp.co.gh.api.payload.response.ApiErrorResponse;
 import jp.co.gh.api.payload.response.LoginResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 /**
- * ログイン処理をするコントローラークラス
+ * ログイン・ログアウト処理をするコントローラークラス
  */
 @RestController
 @RequestMapping(path = "/api/v1.0", produces = MediaType.APPLICATION_JSON_VALUE)
-public class LoginController {
+public class AuthController {
 
     /**
      * ログイン処理
@@ -34,6 +31,21 @@ public class LoginController {
             @ApiResponse(code = 401, message = "検証に失敗、ユーザーが存在しない。", response = ApiErrorResponse.class)
     })
     public Mono<ResponseEntity<LoginResponse>> login(@RequestBody final LoginRequest loginReq) {
+        return Mono.just(ResponseEntity.ok(null));
+    }
+
+    /**
+     * ログアウト処理
+     *
+     * @return 無し
+     */
+    @DeleteMapping("/logout")
+    @ApiOperation(value = "ログアウト", notes = "アクセストークン、リフレッシュトークンを削除する")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "ログアウト成功。"),
+            @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
+    })
+    public Mono<ResponseEntity<Void>> logout() {
         return Mono.just(ResponseEntity.ok(null));
     }
 }

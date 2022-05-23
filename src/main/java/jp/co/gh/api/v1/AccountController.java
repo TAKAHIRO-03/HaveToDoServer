@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @Validated
 @RestController
-@RequestMapping("/api/v1.0")
+@RequestMapping("/api/v1.0/accounts")
 public class AccountController {
 
     /**
@@ -23,7 +23,7 @@ public class AccountController {
      * @param req アカウント登録パラメータ
      * @return 無し
      */
-    @PostMapping("/accounts")
+    @PostMapping
     @ApiOperation(value = "アカウント登録", notes = "アカウントの登録処理。")
     @ApiResponses({
             @ApiResponse(code = 201, message = "アカウント登録成功"),
@@ -34,4 +34,24 @@ public class AccountController {
     public Mono<ResponseEntity<Void>> create(@Valid @RequestBody final AccountRequest req) {
         return Mono.just(ResponseEntity.created(null).build());
     }
+
+
+    /**
+     * アカウント削除処理
+     *
+     * @return 無し
+     */
+    @DeleteMapping
+    @ApiOperation(value = "アカウント削除", notes = "アカウントを削除する。")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "アカウントの削除成功"),
+            @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
+            @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
+            @ApiResponse(code = 404, message = "対象のアカウントが見つからない", response = ApiErrorResponse.class),
+            @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
+    })
+    public Mono<ResponseEntity<Void>> delete() {
+        return Mono.just(ResponseEntity.created(null).build());
+    }
+
 }
