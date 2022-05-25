@@ -101,7 +101,7 @@ public class PlannedHabitController {
     })
     public Mono<ResponseEntity<Void>> delete(
             @ApiParam(required = true, value = "削除対象となるID")
-            @PositiveOrZero @PathVariable Long id,
+            @PositiveOrZero @PathVariable long id,
             @ApiParam(required = true, value = "リピートされたものを削除するか")
             @RequestParam boolean repeatDeleteFlg) {
         return Mono.just(ResponseEntity.noContent().build());

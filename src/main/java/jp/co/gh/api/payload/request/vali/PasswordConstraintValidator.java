@@ -19,7 +19,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
      * {@inheritDoc}
      */
     @Override
-    public void initialize(final ValidPassword arg) {
+    public void initialize(ValidPassword constraintAnnotation) {
     }
 
     /**
