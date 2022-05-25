@@ -12,9 +12,9 @@ import java.time.ZonedDateTime;
 public class ExecutedHabit implements Serializable {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "planned_habit_id")
-    private PlannedHabit plannedHabitId;
+    @OneToOne
+    @JoinColumn(name = "planned_habit_id", insertable = false, updatable = false)
+    private PlannedHabit plannedHabit;
 
     @Column(name = "started_time")
     private ZonedDateTime startedTime;
@@ -22,10 +22,8 @@ public class ExecutedHabit implements Serializable {
     @Column(name = "ended_time")
     private ZonedDateTime endedTime;
 
-    @Column(name = "is_achieved")
-    private Boolean isAchieved;
-
-    @Column(name = "is_cancelled")
-    private Boolean isCancelled;
+    @OneToOne
+    @JoinColumn(name = "executed_habit_status_name", insertable = false, updatable = false)
+    private ExecutedHabitStatus executedHabitStatus;
 
 }

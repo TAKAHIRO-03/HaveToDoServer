@@ -18,8 +18,8 @@ public class PlannedHabit implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account accountId;
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Account account;
 
     @Column(name = "title")
     private String title;
@@ -35,4 +35,11 @@ public class PlannedHabit implements Serializable {
 
     @Column(name = "is_repeat")
     private boolean isRepeat;
+
+    @OneToOne(mappedBy = "plannedHabit", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ExecutedHabit executedHabit;
+
+    @OneToOne(mappedBy = "plannedHabit", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private PaymentJobHistory paymentJobHistory;
+
 }

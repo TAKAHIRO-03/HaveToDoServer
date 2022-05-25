@@ -11,12 +11,7 @@ import java.io.Serializable;
 public class Roles implements Serializable {
 
     @Id
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "role_label")
-    private String roleLabel;
-
-    @Column(name = "role_value")
-    private String roleValue;
 }

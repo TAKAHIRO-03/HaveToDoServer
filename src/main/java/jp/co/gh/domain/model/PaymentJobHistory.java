@@ -12,9 +12,9 @@ import java.time.ZonedDateTime;
 public class PaymentJobHistory implements Serializable {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "planned_habit_id")
-    private PlannedHabit plannedHabitId;
+    @OneToOne
+    @JoinColumn(name = "planned_habit_id", insertable = false, updatable = false)
+    private PlannedHabit plannedHabit;
 
     @Column(name = "executed_time")
     private ZonedDateTime executedTime;

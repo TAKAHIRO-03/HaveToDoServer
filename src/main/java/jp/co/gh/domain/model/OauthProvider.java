@@ -11,10 +11,7 @@ import java.io.Serializable;
 public class OauthProvider implements Serializable {
 
     @Id
-    @Column(name = "id")
-    private Integer id;
-
-    @Column(name = "types")
-    private String types;
+    @Column(name = "type")
+    private String type;
 
 }

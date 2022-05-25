@@ -15,8 +15,8 @@ import java.time.ZonedDateTime;
 public class FailedAuthId implements Serializable {
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account accountId;
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Account account;
 
     @Column(name = "auth_ts")
     private ZonedDateTime authTs;

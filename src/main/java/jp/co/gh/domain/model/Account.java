@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,22 +29,28 @@ public class Account implements Serializable {
     @Column(name = "is_locked")
     private boolean isLocked;
 
-    @ManyToOne
-    @JoinColumn(name = "timezones_name")
-    private Timezones timezonesName;
+    @OneToOne
+    @JoinColumn(name = "timezones_name", insertable = false, updatable = false)
+    private Timezones timezones;
 
-    @ManyToOne
-    @JoinColumn(name = "currency_iso_code")
-    private Currency currencyIsoCode;
+    @OneToOne
+    @JoinColumn(name = "currency_iso_code", insertable = false, updatable = false)
+    private Currency currency;
 
-    @ManyToOne
-    @JoinColumn(name = "oauth_provider_id")
-    private OauthProvider oauthProviderId;
+    @OneToOne
+    @JoinColumn(name = "oauth_provider_type", insertable = false, updatable = false)
+    private OauthProvider oauthProvider;
 
     @Column(name = "created_time")
     private ZonedDateTime createdTime;
 
     @Column(name = "updated_time")
     private ZonedDateTime updatedTime;
+
+    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PlannedHabit> plannedHabits;
+
+    @OneToMany(mappedBy = "failedAuthId.account", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<FailedAuth> failedAuths;
 
 }
