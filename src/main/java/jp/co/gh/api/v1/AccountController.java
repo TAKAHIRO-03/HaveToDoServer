@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import jp.co.gh.api.payload.request.AccountRequest;
 import jp.co.gh.api.payload.response.ApiErrorResponse;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 
 @Validated
 @RestController
-@RequestMapping("/api/v1.0/accounts")
+@RequestMapping(path = "/api/v1.0/accounts", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AccountController {
 
     /**

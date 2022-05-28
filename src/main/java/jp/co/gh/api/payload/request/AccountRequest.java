@@ -25,12 +25,12 @@ public record AccountRequest(
 
         @ValidPassword
         @NotBlank
-        @ApiModelProperty(value = "パスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "GoodHabits!!!", required = true)
+        @ApiModelProperty(value = "パスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "GoodHabits1!!!", required = true)
         String password,
 
         @ValidPassword
         @NotBlank
-        @ApiModelProperty(value = "パスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "GoodHabits!!!", required = true)
+        @ApiModelProperty(value = "パスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "GoodHabits1!!!", required = true)
         String confirmPassword,
 
         @JsonIgnore
