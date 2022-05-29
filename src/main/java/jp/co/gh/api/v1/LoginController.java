@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 /**
- * ログイン・ログアウト処理をするコントローラークラス
+ * ログイン・ログアウト処理をするコントローラー
  */
 @RestController
 @RequestMapping(path = "/api/v1.0", produces = MediaType.APPLICATION_JSON_VALUE)
-public class AuthController {
+public class LoginController {
 
     /**
      * ログイン処理
