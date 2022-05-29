@@ -3,6 +3,7 @@ package jp.co.gh.api.v1;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import jp.co.gh.api.payload.request.AccountPasswordRequest;
 import jp.co.gh.api.payload.request.AccountRequest;
 import jp.co.gh.api.payload.response.ApiErrorResponse;
 import org.springframework.http.MediaType;
@@ -54,5 +55,20 @@ public class AccountController {
     public Mono<ResponseEntity<Void>> delete() {
         return Mono.just(ResponseEntity.created(null).build());
     }
+
+
+    @PatchMapping("/password")
+    @ApiOperation(value = "アカウントのパスワード更新", notes = "アカウントのパスワードを更新する。")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "アカウントのパスワード更新成功"),
+            @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
+            @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
+            @ApiResponse(code = 404, message = "対象のアカウントが見つからない", response = ApiErrorResponse.class),
+            @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
+    })
+    public Mono<ResponseEntity<Void>> password(@Valid @RequestBody final AccountPasswordRequest req) {
+        return Mono.just(ResponseEntity.created(null).build());
+    }
+
 
 }
