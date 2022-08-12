@@ -9,9 +9,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = PasswordFieldsValueMatchValidator.class)
+@Constraint(validatedBy = FieldsValueMatchValidator.class)
 @Documented
-public @interface PasswordValueMatch {
+public @interface FieldsValueMatch {
 
     String message() default "Fields values don't match.";
 
@@ -26,6 +26,6 @@ public @interface PasswordValueMatch {
     @Target({TYPE})
     @Retention(RUNTIME)
     @interface List {
-        PasswordValueMatch[] value();
+        FieldsValueMatch[] value();
     }
 }

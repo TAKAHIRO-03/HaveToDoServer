@@ -6,9 +6,9 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * パスワードと確認用パスワードのバリデーション
+ * ２つのクラスフィールドが同じかを判定するバリデーション
  */
-public class PasswordFieldsValueMatchValidator implements ConstraintValidator<PasswordValueMatch, Object> {
+public class FieldsValueMatchValidator implements ConstraintValidator<FieldsValueMatch, Object> {
 
     private String field;
     private String fieldMatch;
@@ -18,7 +18,7 @@ public class PasswordFieldsValueMatchValidator implements ConstraintValidator<Pa
      * {@inheritDoc}
      */
     @Override
-    public void initialize(PasswordValueMatch constraintAnnotation) {
+    public void initialize(final FieldsValueMatch constraintAnnotation) {
         this.field = constraintAnnotation.field();
         this.fieldMatch = constraintAnnotation.fieldMatch();
         this.message = constraintAnnotation.message();
@@ -27,16 +27,19 @@ public class PasswordFieldsValueMatchValidator implements ConstraintValidator<Pa
     /**
      * {@inheritDoc}
      */
-    public boolean isValid(Object value, ConstraintValidatorContext context) {
+    @Override
+    public boolean isValid(final Object value, final ConstraintValidatorContext context) {
 
         final var fieldValue = new BeanWrapperImpl(value)
                 .getPropertyValue(field);
         final var fieldMatchValue = new BeanWrapperImpl(value)
                 .getPropertyValue(fieldMatch);
 
-        var isValid = false;
+        final boolean isValid;
         if (fieldValue != null) {
             isValid = fieldValue.equals(fieldMatchValue);
+        } else {
+            isValid = false;
         }
 
         if (!isValid) {

@@ -1,13 +1,13 @@
 package jp.co.gh.api.payload.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import jp.co.gh.api.payload.request.vali.PasswordValueMatch;
+import jp.co.gh.api.payload.request.vali.FieldsValueMatch;
 import jp.co.gh.api.payload.request.vali.ValidPassword;
 
 import javax.validation.constraints.NotBlank;
 
-@PasswordValueMatch.List({
-        @PasswordValueMatch(
+@FieldsValueMatch.List({
+        @FieldsValueMatch(
                 field = "password",
                 fieldMatch = "confirmPassword",
                 message = "Passwords do not match."

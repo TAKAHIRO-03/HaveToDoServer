@@ -19,7 +19,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
      * {@inheritDoc}
      */
     @Override
-    public void initialize(ValidPassword constraintAnnotation) {
+    public void initialize(final ValidPassword constraintAnnotation) {
     }
 
     /**
@@ -27,7 +27,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
      */
     @SneakyThrows
     @Override
-    public boolean isValid(String password, ConstraintValidatorContext context) {
+    public boolean isValid(final String password, final ConstraintValidatorContext context) {
 
         final var props = new Properties();
         final var inputStream = getClass().getClassLoader().getResourceAsStream(PASSY_PROP);

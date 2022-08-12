@@ -2,18 +2,23 @@ package jp.co.gh.api.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
-import jp.co.gh.api.payload.request.vali.PasswordValueMatch;
+import jp.co.gh.api.payload.request.vali.FieldsValueMatch;
 import jp.co.gh.api.payload.request.vali.ValidPassword;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@PasswordValueMatch.List({
-        @PasswordValueMatch(
+@FieldsValueMatch.List({
+        @FieldsValueMatch(
                 field = "password",
                 fieldMatch = "confirmPassword",
                 message = "Passwords do not match."
+        ),
+        @FieldsValueMatch(
+                field = "username",
+                fieldMatch = "confirmUsername",
+                message = "Username do not match."
         )
 })
 public record AccountRequest(
@@ -22,6 +27,11 @@ public record AccountRequest(
         @NotBlank
         @ApiModelProperty(value = "ユーザー名及びログインID", example = "hogehoge@example.co.jp", required = true)
         String username,
+
+        @Email
+        @NotBlank
+        @ApiModelProperty(value = "確認用ユーザー名及びログインID", example = "hogehoge@example.co.jp", required = true)
+        String confirmUsername,
 
         @ValidPassword
         @NotBlank
@@ -41,22 +51,24 @@ public record AccountRequest(
 
         @AssertTrue
         @ApiModelProperty(value = "利用規約のチェック", example = "true", required = true)
-        boolean isCheckedTermsOfService
+        boolean acceptTerms
 ) {
 
     public AccountRequest(
-            String username,
-            String password,
-            String confirmPassword,
-            String timezonesName,
-            String currencyIsoCode,
-            boolean isCheckedTermsOfService) {
+            final String username,
+            final String confirmUsername,
+            final String password,
+            final String confirmPassword,
+            final String timezonesName,
+            final String currencyIsoCode,
+            final boolean acceptTerms) {
         this.username = username;
+        this.confirmUsername = confirmUsername;
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.timezonesName = "Asia/Tokyo"; /* Fixed for Japan. Until multilingual support*/
         this.currencyIsoCode = "JPY"; /* Fixed for Japan. Until multilingual support*/
-        this.isCheckedTermsOfService = isCheckedTermsOfService;
+        this.acceptTerms = acceptTerms;
     }
 
     /**
@@ -66,6 +78,7 @@ public record AccountRequest(
     public String toString() {
         final StringBuilder sb = new StringBuilder("AccountRequest{");
         sb.append("username='").append(username).append('\'');
+        sb.append("confirmUsername='").append(confirmUsername).append('\'');
         sb.append(", password='");
         for (int i = 0, len = this.password.length(); i < len; i++) {
             sb.append("*");
@@ -76,7 +89,7 @@ public record AccountRequest(
         }
         sb.append('\'').append(", timezonesName='").append(timezonesName).append('\'');
         sb.append(", currencyIsoCode='").append(currencyIsoCode).append('\'');
-        sb.append(", isCheckedTermsOfService=").append(isCheckedTermsOfService);
+        sb.append(", acceptTerms=").append(acceptTerms);
         sb.append('}');
         return sb.toString();
     }
