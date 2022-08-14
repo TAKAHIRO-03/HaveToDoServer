@@ -1,4 +1,4 @@
-package jp.co.gh.filter.payload;
+package jp.co.gh.filter.log;
 
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 public class BodyCaptureResponse extends ServerHttpResponseDecorator {
+
     private final StringBuilder body = new StringBuilder();
 
     BodyCaptureResponse(final ServerHttpResponse delegate) {
@@ -22,14 +23,11 @@ public class BodyCaptureResponse extends ServerHttpResponseDecorator {
     @Override
     public Mono<Void> writeWith(final Publisher<? extends DataBuffer> body) {
         final Flux<DataBuffer> buffer = Flux.from(body);
-        return super.writeWith(buffer.doOnNext(this::capture));
+        return super.writeWith(buffer.doOnNext((x) -> this.body.append(StandardCharsets.UTF_8.decode(x.asByteBuffer()))));
     }
 
-    private void capture(final DataBuffer buffer) {
-        this.body.append(StandardCharsets.UTF_8.decode(buffer.asByteBuffer()));
-    }
-
-    public String getFullBody() {
+    String getFullBody() {
         return this.body.toString();
     }
+
 }

@@ -1,4 +1,4 @@
-package jp.co.gh.filter.payload;
+package jp.co.gh.filter.log;
 
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.ServerWebExchangeDecorator;
@@ -8,7 +8,7 @@ public class BodyCaptureExchange extends ServerWebExchangeDecorator {
     private BodyCaptureRequest bodyCaptureRequest;
     private BodyCaptureResponse bodyCaptureResponse;
 
-    public BodyCaptureExchange(final ServerWebExchange exchange) {
+    BodyCaptureExchange(final ServerWebExchange exchange) {
         super(exchange);
         this.bodyCaptureRequest = new BodyCaptureRequest(exchange.getRequest());
         this.bodyCaptureResponse = new BodyCaptureResponse(exchange.getResponse());
