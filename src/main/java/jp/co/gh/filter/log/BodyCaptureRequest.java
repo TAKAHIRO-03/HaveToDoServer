@@ -1,4 +1,4 @@
-package jp.co.gh.filter.payload;
+package jp.co.gh.filter.log;
 
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import java.nio.charset.StandardCharsets;
 
 public class BodyCaptureRequest extends ServerHttpRequestDecorator {
+
     private final StringBuilder body = new StringBuilder();
 
     BodyCaptureRequest(final ServerHttpRequest delegate) {
@@ -19,14 +20,10 @@ public class BodyCaptureRequest extends ServerHttpRequestDecorator {
      */
     @Override
     public Flux<DataBuffer> getBody() {
-        return super.getBody().doOnNext(this::capture);
+        return super.getBody().doOnNext((x) -> this.body.append(StandardCharsets.UTF_8.decode(x.asByteBuffer())));
     }
 
-    private void capture(final DataBuffer buffer) {
-        this.body.append(StandardCharsets.UTF_8.decode(buffer.asByteBuffer()));
-    }
-
-    public String getFullBody() {
+    String getFullBody() {
         return this.body.toString();
     }
 
