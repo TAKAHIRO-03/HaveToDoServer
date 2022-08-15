@@ -1,0 +1,110 @@
+package jp.co.havetodo.api.v1;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import jp.co.havetodo.api.payload.request.PlannedTaskRequest;
+import jp.co.havetodo.api.payload.response.ApiErrorResponse;
+import jp.co.havetodo.api.payload.response.PlannedTaskResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
+import java.util.List;
+
+/**
+ * 計画済みタスクのCRD処理をするコントローラー
+ */
+@Validated
+@RestController
+@RequestMapping(path = "/api/v1.0/plannedTasks", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PlannedTaskController {
+
+    /**
+     * 計画済みの単一のタスク取得処理
+     *
+     * @param id 取得対象となるID
+     * @return ユーザーに紐づいた計画済みタスク（単一）
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "計画済みの単一のタスク取得", notes = "ユーザーの計画済みタスクを１つ取得する。過去の計画済みタスクは取得しない。")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "計画済みタスク返却", response = PlannedTaskResponse.class),
+            @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
+            @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
+            @ApiResponse(code = 404, message = "タスク", response = ApiErrorResponse.class),
+            @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
+    })
+    public Mono<ResponseEntity<PlannedTaskResponse>> get(
+            @ApiParam(required = true, value = "取得対象となるID")
+            @PositiveOrZero @PathVariable final Long id) {
+        return Mono.just(ResponseEntity.ok(null));
+    }
+
+    /**
+     * ユーザーに紐づいた計画済みタスク取得処理
+     *
+     * @return 計画済みタスク（複数）
+     */
+    @GetMapping
+    @ApiOperation(value = "計画済みのタスク取得", notes = "ユーザーの計画済みタスクを全て取得する。過去の計画済みタスクは取得しない。")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "計画済みタスク返却", response = PlannedTaskResponse.class, responseContainer = "List"),
+            @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
+            @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
+            @ApiResponse(code = 404, message = "計画済みのタスクが見つからなかった時", response = ApiErrorResponse.class),
+            @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
+    })
+    public Mono<ResponseEntity<List<PlannedTaskResponse>>> getAll(@PageableDefault final Pageable page) {
+        return Mono.just(ResponseEntity.ok(null));
+    }
+
+    /**
+     * タスク登録処理
+     *
+     * @param req タスク登録パラメータ
+     * @return 無し
+     */
+    @PostMapping
+    @ApiOperation(value = "タスク登録", notes = "タスクを登録する。リピートのフラグにより複数タスクを登録することが出来る。")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "タスク登録成功"),
+            @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
+            @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
+            @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
+    })
+    public Mono<ResponseEntity<Void>> create(@Valid @RequestBody final PlannedTaskRequest req) {
+        return Mono.just(ResponseEntity.created(null).build());
+    }
+
+    /**
+     * 計画済みタスク削除処理
+     *
+     * @param id 削除対象となる計画済みタスク
+     * @return 無し
+     */
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "計画済みの単一タスク削除", notes = "ユーザーの計画済みタスクを１つ削除する。リピートで登録したタスクの場合、複数削除することが出来る。")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "計画済みタスクの削除成功"),
+            @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
+            @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
+            @ApiResponse(code = 404, message = "計画済みのタスクが見つからない", response = ApiErrorResponse.class),
+            @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
+    })
+    public Mono<ResponseEntity<Void>> delete(
+            @ApiParam(required = true, value = "削除対象となるID")
+            @PositiveOrZero @PathVariable final long id,
+            @ApiParam(required = true, value = "リピートされたものを削除するか")
+            @RequestParam final boolean repeatDeleteFlg) {
+        return Mono.just(ResponseEntity.noContent().build());
+    }
+
+}

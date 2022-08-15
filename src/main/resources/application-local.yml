@@ -1,10 +1,10 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://rdb-ctr:5432/goodhabits
-    username: ghuser
-    password: ghpass
+    url: r2dbc:postgresql://rdb-ctr:5432/havetodo
+    username: havetodouser
+    password: havetodopass
   flyway:
-    url: jdbc:postgresql://rdb-ctr:5432/goodhabits
+    url: jdbc:postgresql://rdb-ctr:5432/havetodo
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
     baseline-on-migrate: true

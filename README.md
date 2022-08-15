@@ -1,4 +1,4 @@
-# GoodHabitsServer
+# HaveTodoServer
 
 ## 環境構築
 1. 事前にjava17のパスを通す。
@@ -17,9 +17,9 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 
 3. PostgreSQLにデータベースとユーザー、パスワードを設定する。
 ```
-DB名:goodhabits ※1
-ユーザー名:ghuser ※2
-パスワード:ghpass
+DB名:havetodo ※1
+ユーザー名:havetodouser ※2
+パスワード:havetodopass
 
 ※1 DBの所有者はghuserとする。
 ※2 ユーザーはSuperUserを有効化、ログインを有効化する。
@@ -46,7 +46,7 @@ $ ~ ./mvnw compile jib:dockerBuild
 ```
 $ ~ docker images
 REPOSITORY                       TAG                IMAGE ID       CREATED         SIZE
-goodhabits/server                latest             b652e2fa6f55   52 years ago    325MB
+havetodo/server                latest             b652e2fa6f55   52 years ago    325MB
 ```
 
 ## API仕様書
