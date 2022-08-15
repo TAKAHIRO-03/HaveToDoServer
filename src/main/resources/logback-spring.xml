@@ -10,7 +10,7 @@
     <springProfile name="local">
 
         <!-- 開発範囲をデバッグレベルにしファイルに出力したい場合 -->
-        <logger name="jp.co.gh" level="DEBUG" additivity="false">
+        <logger name="jp.co.havetodo" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
 
@@ -24,7 +24,7 @@
     <springProfile name="pro">
 
         <!-- 開発範囲をデバッグレベルにしファイルに出力したい場合 -->
-        <logger name="jp.co.gh" level="DEBUG" additivity="false">
+        <logger name="jp.co.havetodo" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
 

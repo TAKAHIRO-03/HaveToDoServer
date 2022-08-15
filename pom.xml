@@ -8,11 +8,11 @@
         <version>2.5.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>jp.co.gh</groupId>
-    <artifactId>GoodHabitsServer</artifactId>
+    <groupId>jp.co.havetodo</groupId>
+    <artifactId>HaveTodoServer</artifactId>
     <version>0.0.1</version>
-    <name>GoodHabitsServer</name>
-    <description>GoodHabitsServer</description>
+    <name>HaveTodoServer</name>
+    <description>HaveTodoServer</description>
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2020.0.5</spring-cloud.version>
@@ -138,10 +138,10 @@
                         <image>amazoncorretto:17-al2-full</image>
                     </from>
                     <to>
-                        <image>goodhabits/server</image>
+                        <image>havetodo/server</image>
                     </to>
                     <container>
-                        <mainClass>jp.co.gh.App</mainClass>
+                        <mainClass>jp.co.havetodo.App</mainClass>
                         <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>
                 </configuration>

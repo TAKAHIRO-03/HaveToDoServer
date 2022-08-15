@@ -6,6 +6,6 @@ management: #actuator default
     enabled-by-default: false
 spring:
   application:
-    name: goodhabits #app name
+    name: havetodo #app name
   profiles:
     active: ${PROFILE:local} #profile
