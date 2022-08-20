@@ -1,28 +1,14 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "currency")
-public class Currency implements Serializable {
+@Table(value = "currency")
+public record Currency(@Id @Column(value = "iso_code") String isoCode,
+                       @Column(value = "country") String country,
+                       @Column(value = "sign") String sign,
+                       @Column(value = "name") String name) implements Serializable {
 
-    @Id
-    @Column(name = "iso_code")
-    private String isoCode;
-
-    @Column(name = "country")
-    private String country;
-
-    @Column(name = "sign")
-    private String sign;
-
-    @Column(name = "name")
-    private String name;
 }
