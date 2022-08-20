@@ -24,6 +24,9 @@ public class PlannedTask implements Serializable {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "start_time")
     private ZonedDateTime startTime;
 
