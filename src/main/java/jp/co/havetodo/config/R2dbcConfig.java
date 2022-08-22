@@ -5,7 +5,8 @@ import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import java.util.ArrayList;
 import java.util.List;
-import jp.co.havetodo.domain.repo.AccountReadConverter;
+import jp.co.havetodo.domain.repo.conv.AccountReadConverter;
+import jp.co.havetodo.domain.repo.conv.PlannedTaskReadConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,6 +50,7 @@ public class R2dbcConfig extends AbstractR2dbcConfiguration {
     protected List<Object> getCustomConverters() {
         final var converterList = new ArrayList<>();
         converterList.add(new AccountReadConverter());
+        converterList.add(new PlannedTaskReadConverter());
         return converterList;
     }
 

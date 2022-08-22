@@ -3,17 +3,17 @@ package jp.co.havetodo.domain.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Value
-@Accessors(fluent = true)
 @Builder
 @Table(value = "planned_task")
 public class PlannedTask implements Serializable {
@@ -24,9 +24,10 @@ public class PlannedTask implements Serializable {
     @NotNull
     Long id;
 
+    @Column(value = "account_id")
     @NonNull
     @NotNull
-    Account account;
+    Long accountId;
 
     @Column(value = "title")
     @NonNull
@@ -54,14 +55,18 @@ public class PlannedTask implements Serializable {
     BigDecimal cost;
 
     @Column(value = "is_repeat")
+    @NonNull
+    @NotNull
     Boolean isRepeat;
 
+    @Transient
     @NonNull
     @NotNull
-    ExecutedTask executedTask;
+    Optional<ExecutedTask> executedTask;
 
+    @Transient
     @NonNull
     @NotNull
-    PaymentJobHistory paymentJobHistory;
+    Optional<PaymentJobHistory> paymentJobHistory;
 
 }
