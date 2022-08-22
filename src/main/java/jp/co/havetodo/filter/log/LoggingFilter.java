@@ -24,21 +24,30 @@ public class LoggingFilter implements WebFilter {
      */
     @Override
     public Mono<Void> filter(final ServerWebExchange exchange, final WebFilterChain chain) {
+
+        // when url is not start with "/api", ignore output request and response information.
+        if (!exchange.getRequest().getPath().value().startsWith("/api")) {
+            return chain.filter(exchange);
+        }
+
         final var bodyCaptureExchange = new BodyCaptureExchange(exchange);
         return chain.filter(bodyCaptureExchange).doOnSuccess((se) -> {
 
             // if request body contains password, replace "*"
             final String reqBody;
             if (bodyCaptureExchange.getRequest().getFullBody().contains("password")) {
-                reqBody = replacePasswordToAsterisk(bodyCaptureExchange.getRequest().getFullBody());
+                reqBody = this.replacePasswordToAsterisk(
+                    bodyCaptureExchange.getRequest().getFullBody());
             } else {
                 reqBody = bodyCaptureExchange.getRequest().getFullBody();
             }
-            log.info("Request headers={}, method={}, path={}, body={}", exchange.getRequest().getHeaders(), exchange.getRequest().getMethod(),
-                    exchange.getRequest().getPath(), reqBody);
+            log.info("Request headers={}, method={}, path={}, body={}",
+                exchange.getRequest().getHeaders(), exchange.getRequest().getMethod(),
+                exchange.getRequest().getPath(), reqBody);
 
-            log.info("Response headers={}, status={}, body={}", exchange.getResponse().getHeaders(), exchange.getResponse().getStatusCode(),
-                    bodyCaptureExchange.getResponse().getFullBody());
+            log.info("Response headers={}, status={}, body={}", exchange.getResponse().getHeaders(),
+                exchange.getResponse().getStatusCode(),
+                bodyCaptureExchange.getResponse().getFullBody());
         });
     }
 
@@ -50,7 +59,7 @@ public class LoggingFilter implements WebFilter {
      */
     private String replacePasswordToAsterisk(final String body) {
         try {
-            final var reqBodyAsJson = objMapper.readValue(body, JsonNode.class);
+            final var reqBodyAsJson = this.objMapper.readValue(body, JsonNode.class);
             final var password = reqBodyAsJson.get("password").asText();
             final var tmp = new StringBuilder();
             for (int i = 0, len = password.length(); i < len; i++) {
