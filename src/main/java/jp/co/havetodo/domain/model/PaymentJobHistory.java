@@ -1,21 +1,16 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "payment_job_history")
-public class PaymentJobHistory implements Serializable {
+@Table(value = "payment_job_history")
+public record PaymentJobHistory(@Id @NonNull @NotNull PlannedTask plannedTask,
+                                @Column(value = "executed_time") @NonNull @NotNull ZonedDateTime executedTime)
+    implements Serializable {
 
-    @Id
-    @OneToOne
-    @JoinColumn(name = "planned_task_id", insertable = false, updatable = false)
-    private PlannedTask plannedTask;
-
-    @Column(name = "executed_time")
-    private ZonedDateTime executedTime;
 }

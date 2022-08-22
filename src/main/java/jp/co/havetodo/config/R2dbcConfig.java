@@ -5,19 +5,15 @@ import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import java.util.ArrayList;
 import java.util.List;
-import javax.sql.DataSource;
 import jp.co.havetodo.domain.repo.AccountReadConverter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
-@EnableAutoConfiguration
-public class TestConfig extends AbstractR2dbcConfiguration {
+public class R2dbcConfig extends AbstractR2dbcConfiguration {
 
     @Value("${spring.r2dbc.url}")
     private String url;
@@ -31,23 +27,6 @@ public class TestConfig extends AbstractR2dbcConfiguration {
     @Bean
     public R2dbcEntityTemplate template() {
         return new R2dbcEntityTemplate(this.connectionFactory());
-    }
-
-    @Bean
-    public DataSource dataSource() {
-        final var dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5431/havetodo");
-        dataSource.setUsername("havetodouser");
-        dataSource.setPassword("havetodopass");
-        return dataSource;
-    }
-
-    @Override
-    protected List<Object> getCustomConverters() {
-        final var converterList = new ArrayList<>();
-        converterList.add(new AccountReadConverter());
-        return converterList;
     }
 
     @Override
@@ -65,4 +44,12 @@ public class TestConfig extends AbstractR2dbcConfiguration {
             .build();
         return new PostgresqlConnectionFactory(config);
     }
+
+    @Override
+    protected List<Object> getCustomConverters() {
+        final var converterList = new ArrayList<>();
+        converterList.add(new AccountReadConverter());
+        return converterList;
+    }
+
 }

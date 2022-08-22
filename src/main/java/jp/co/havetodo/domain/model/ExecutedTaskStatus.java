@@ -1,20 +1,15 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "executed_task_status")
-public class ExecutedTaskStatus implements Serializable {
-
-    @Id
-    @Column(name = "name")
-    private String name;
+@Table(value = "executed_task_status")
+public record ExecutedTaskStatus(
+    @Id @Column(value = "name") @NonNull @NotNull String name) implements
+    Serializable {
 
 }

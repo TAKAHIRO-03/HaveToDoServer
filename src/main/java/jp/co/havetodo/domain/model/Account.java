@@ -1,56 +1,70 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "account")
+@Value
+@Accessors(fluent = true)
+@Builder
+@Table(value = "account")
 public class Account implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(value = "id")
+    @NonNull
+    @NotNull
+    Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(value = "username")
+    @NonNull
+    @NotNull
+    String username;
 
-    @Column(name = "password")
-    private String password;
+    @Column(value = "password")
+    @NonNull
+    @NotNull
+    String password;
 
-    @Column(name = "roles")
-    private String roles;
+    @Column(value = "is_locked")
+    Boolean isLocked;
 
-    @Column(name = "is_locked")
-    private boolean isLocked;
+    @NonNull
+    @NotNull
+    Timezones timezones;
 
-    @OneToOne
-    @JoinColumn(name = "timezones_name", insertable = false, updatable = false)
-    private Timezones timezones;
+    @NonNull
+    @NotNull
+    Currency currency;
 
-    @OneToOne
-    @JoinColumn(name = "currency_iso_code", insertable = false, updatable = false)
-    private Currency currency;
+    @Nullable
+    OauthProvider oauthProvider;
 
-    @OneToOne
-    @JoinColumn(name = "oauth_provider_type", insertable = false, updatable = false)
-    private OauthProvider oauthProvider;
+    @NonNull
+    @NotNull
+    @Column(value = "created_time")
+    ZonedDateTime createdTime;
 
-    @Column(name = "created_time")
-    private ZonedDateTime createdTime;
+    @NonNull
+    @NotNull
+    @Column(value = "updated_time")
+    ZonedDateTime updatedTime;
 
-    @Column(name = "updated_time")
-    private ZonedDateTime updatedTime;
+    @NonNull
+    @NotNull
+    List<PlannedTask> plannedTasks;
 
-    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<PlannedTask> plannedTasks;
-
-    @OneToMany(mappedBy = "failedAuthId.account", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<FailedAuth> failedAuths;
+    @NonNull
+    @NotNull
+    List<FailedAuth> failedAuths;
 
 }

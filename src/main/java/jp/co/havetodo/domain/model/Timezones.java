@@ -1,29 +1,18 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import io.r2dbc.postgresql.codec.Interval;
 import java.io.Serializable;
-import java.time.Duration;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "timezones")
-public class Timezones implements Serializable {
+@Table(value = "timezones")
+public record Timezones(@Id @Column(value = "name") @NonNull @NotNull String name,
+                        @Column(value = "abbrev") @NonNull @NotNull String abbrev,
+                        @Column(value = "utc_offset") @NonNull @NotNull Interval utcOffset,
+                        @Column(value = "is_dst") @NonNull @NotNull Boolean isDst) implements
+    Serializable {
 
-    @Id
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "abbrev")
-    private String abbrev;
-
-    @Column(name = "utc_offset")
-    private Duration utcOffset;
-
-    @Column(name = "is_dst")
-    private Boolean isDst;
 }

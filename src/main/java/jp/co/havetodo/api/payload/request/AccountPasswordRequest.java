@@ -1,40 +1,39 @@
 package jp.co.havetodo.api.payload.request;
 
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotBlank;
 import jp.co.havetodo.api.payload.request.vali.FieldsValueMatch;
 import jp.co.havetodo.api.payload.request.vali.ValidPassword;
 
-import javax.validation.constraints.NotBlank;
-
 @FieldsValueMatch.List({
-        @FieldsValueMatch(
-                field = "password",
-                fieldMatch = "confirmPassword",
-                message = "Passwords do not match."
-        )
+    @FieldsValueMatch(
+        field = "password",
+        fieldMatch = "confirmPassword",
+        message = "Passwords do not match."
+    )
 })
 public record AccountPasswordRequest(
 
-        @ValidPassword
-        @NotBlank
-        @ApiModelProperty(value = "現在使っているパスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "HaveTodo1!!!", required = true)
-        String currentPassword,
+    @ValidPassword
+    @NotBlank
+    @ApiModelProperty(value = "現在使っているパスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "HaveTodo1!!!", required = true)
+    String currentPassword,
 
-        @ValidPassword
-        @NotBlank
-        @ApiModelProperty(value = "パスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "HaveTodo1!!!", required = true)
-        String password,
+    @ValidPassword
+    @NotBlank
+    @ApiModelProperty(value = "パスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "HaveTodo1!!!", required = true)
+    String password,
 
-        @ValidPassword
-        @NotBlank
-        @ApiModelProperty(value = "確認用パスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "HaveTodo1!!!", required = true)
-        String confirmPassword
+    @ValidPassword
+    @NotBlank
+    @ApiModelProperty(value = "確認用パスワード。8文字以上64文字以下で、半角英数字、大文字のアルファベット、記号をそれぞれ1文字以上含まれていること", example = "HaveTodo1!!!", required = true)
+    String confirmPassword
 ) {
 
     public AccountPasswordRequest(
-            final String currentPassword,
-            final String password,
-            final String confirmPassword) {
+        final String currentPassword,
+        final String password,
+        final String confirmPassword) {
         this.currentPassword = currentPassword;
         this.password = password;
         this.confirmPassword = confirmPassword;
