@@ -6,7 +6,7 @@ import io.r2dbc.spi.ConnectionFactory;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
-import jp.co.havetodo.domain.repo.AccountReadConverter;
+import jp.co.havetodo.domain.repo.conv.AccountReadConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
