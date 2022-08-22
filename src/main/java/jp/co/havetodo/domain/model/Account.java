@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.annotation.Id;
@@ -14,7 +13,6 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Value
-@Accessors(fluent = true)
 @Builder
 @Table(value = "account")
 public class Account implements Serializable {

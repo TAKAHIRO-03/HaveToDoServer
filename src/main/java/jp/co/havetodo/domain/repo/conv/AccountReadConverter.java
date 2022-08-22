@@ -1,4 +1,4 @@
-package jp.co.havetodo.domain.repo;
+package jp.co.havetodo.domain.repo.conv;
 
 
 import io.r2dbc.postgresql.codec.Interval;
@@ -30,7 +30,7 @@ public class AccountReadConverter implements Converter<Row, Account> {
             r.get("country", String.class), r.get("sign", String.class),
             r.get("name", String.class));
 
-        final var account = Account.builder()
+        return Account.builder()
             .id(r.get("id", Long.class))
             .username(r.get("username", String.class))
             .password(r.get("password", String.class))
@@ -40,10 +40,9 @@ public class AccountReadConverter implements Converter<Row, Account> {
             .oauthProvider(oauthProvider)
             .createdTime(r.get("created_time", ZonedDateTime.class))
             .updatedTime(r.get("updated_time", ZonedDateTime.class))
-            .plannedTasks(Collections.EMPTY_LIST)
-            .failedAuths(Collections.EMPTY_LIST)
+            .plannedTasks(Collections.emptyList())
+            .failedAuths(Collections.emptyList())
             .build();
 
-        return account;
     }
 }
