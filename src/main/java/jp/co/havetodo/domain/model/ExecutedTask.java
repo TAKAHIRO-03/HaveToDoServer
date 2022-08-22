@@ -1,29 +1,18 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "executed_task")
-public class ExecutedTask implements Serializable {
-
-    @Id
-    @OneToOne
-    @JoinColumn(name = "planned_task_id", insertable = false, updatable = false)
-    private PlannedTask plannedTask;
-
-    @Column(name = "started_time")
-    private ZonedDateTime startedTime;
-
-    @Column(name = "ended_time")
-    private ZonedDateTime endedTime;
-
-    @OneToOne
-    @JoinColumn(name = "executed_task_status_name", insertable = false, updatable = false)
-    private ExecutedTaskStatus executedTaskStatus;
+@Table(value = "executed_task")
+public record ExecutedTask(@Id @NonNull @NotNull PlannedTask plannedTask,
+                           @Column(value = "started_time") @NonNull @NotNull ZonedDateTime startedTime,
+                           @Column(value = "ended_time") @NonNull @NotNull ZonedDateTime endedTime,
+                           @NonNull @NotNull ExecutedTaskStatus executedTaskStatus) implements
+    Serializable {
 
 }

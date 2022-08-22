@@ -1,20 +1,14 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "oauth_provider")
-public class OauthProvider implements Serializable {
-
-    @Id
-    @Column(name = "type")
-    private String type;
+@Table(value = "oauth_provider")
+public record OauthProvider(@Id @Column(value = "type") @NonNull @NotNull String type) implements
+    Serializable {
 
 }

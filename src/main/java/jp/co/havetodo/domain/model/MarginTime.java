@@ -1,27 +1,17 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import io.r2dbc.postgresql.codec.Interval;
 import java.io.Serializable;
-import java.time.Duration;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "margin_time")
-public class MarginTime implements Serializable {
-
-    @Id
-    @Column(name = "id")
-    private Integer id;
-
-    @Column(name = "completed_margin")
-    private Duration completedMargin;
-
-    @Column(name = "cancel_margin")
-    private Duration cancelMargin;
+@Table(value = "margin_time")
+public record MarginTime(@Id @Column(value = "id") @NonNull @NotNull Integer id,
+                         @Column(value = "completed_margin") @NonNull @NotNull Interval completedMargin,
+                         @Column(value = "cancel_margin") @NonNull @NotNull Interval cancelMargin) implements
+    Serializable {
 
 }

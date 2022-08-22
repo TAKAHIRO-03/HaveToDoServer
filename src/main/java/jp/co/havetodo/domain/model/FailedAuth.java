@@ -1,18 +1,15 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "failed_auth")
-public class FailedAuth implements Serializable {
-
-    @EmbeddedId
-    private FailedAuthId failedAuthId;
+@Table(value = "failed_auth")
+public record FailedAuth(@Column(value = "account_id") @NonNull @NotNull Long accountId,
+                         @Column(value = "auth_ts") @NonNull @NotNull ZonedDateTime authTs) implements
+    Serializable {
 
 }

@@ -1,25 +1,17 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "maintenance_plan")
-public class MaintenancePlan implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
-    @Column(name = "start_time")
-    private ZonedDateTime startTime;
-
-    @Column(name = "end_time")
-    private ZonedDateTime endTime;
+@Table(value = "maintenance_plan")
+public record MaintenancePlan(@Id @Column(value = "id") @NonNull @NotNull Integer id,
+                              @Column(value = "start_time") @NonNull @NotNull ZonedDateTime startTime,
+                              @Column(value = "end_time") @NonNull @NotNull ZonedDateTime endTime) implements
+    Serializable {
 
 }

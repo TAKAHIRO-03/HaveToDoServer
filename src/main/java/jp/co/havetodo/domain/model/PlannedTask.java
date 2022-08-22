@@ -1,48 +1,67 @@
 package jp.co.havetodo.domain.model;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Data
-@Entity
-@Table(name = "planned_task")
+@Value
+@Accessors(fluent = true)
+@Builder
+@Table(value = "planned_task")
 public class PlannedTask implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(value = "id")
+    @NonNull
+    @NotNull
+    Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
-    private Account account;
+    @NonNull
+    @NotNull
+    Account account;
 
-    @Column(name = "title")
-    private String title;
+    @Column(value = "title")
+    @NonNull
+    @NotNull
+    String title;
 
-    @Column(name = "description")
-    private String description;
+    @Column(value = "description")
+    @NonNull
+    @NotNull
+    String description;
 
-    @Column(name = "start_time")
-    private ZonedDateTime startTime;
+    @Column(value = "start_time")
+    @NonNull
+    @NotNull
+    ZonedDateTime startTime;
 
-    @Column(name = "end_time")
-    private ZonedDateTime endTime;
+    @Column(value = "end_time")
+    @NonNull
+    @NotNull
+    ZonedDateTime endTime;
 
-    @Column(name = "cost")
-    private BigDecimal cost;
+    @Column(value = "cost")
+    @NonNull
+    @NotNull
+    BigDecimal cost;
 
-    @Column(name = "is_repeat")
-    private boolean isRepeat;
+    @Column(value = "is_repeat")
+    Boolean isRepeat;
 
-    @OneToOne(mappedBy = "plannedTask", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ExecutedTask executedTask;
+    @NonNull
+    @NotNull
+    ExecutedTask executedTask;
 
-    @OneToOne(mappedBy = "plannedTask", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private PaymentJobHistory paymentJobHistory;
+    @NonNull
+    @NotNull
+    PaymentJobHistory paymentJobHistory;
 
 }
