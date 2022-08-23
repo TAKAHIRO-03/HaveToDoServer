@@ -4,6 +4,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import jp.co.havetodo.api.payload.request.PlannedTaskRequest;
@@ -12,9 +17,8 @@ import jp.co.havetodo.api.payload.response.PlannedTaskResponse;
 import jp.co.havetodo.domain.service.PlannedTaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -52,7 +56,7 @@ public class PlannedTaskController {
         @ApiResponse(code = 200, message = "計画済みタスク返却", response = PlannedTaskResponse.class),
         @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
         @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
-        @ApiResponse(code = 404, message = "タスク", response = ApiErrorResponse.class),
+        @ApiResponse(code = 404, message = "タスク"),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
     public Mono<ResponseEntity<PlannedTaskResponse>> get(
@@ -72,16 +76,29 @@ public class PlannedTaskController {
         @ApiResponse(code = 200, message = "計画済みタスク返却", response = PlannedTaskResponse.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
         @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
-        @ApiResponse(code = 404, message = "計画済みのタスクが見つからなかった時", response = ApiErrorResponse.class),
+        @ApiResponse(code = 404, message = "計画済みのタスクが見つからなかった時"),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<Page<PlannedTaskResponse>> getAll(
-        @RequestParam("page") final int page, @RequestParam("size") final int size) {
-
-        final var pageReq = PageRequest.of(page, size, Sort.by("startTime").ascending());
+    public Mono<ResponseEntity<List<PlannedTaskResponse>>> getAll(
+        @ApiParam(required = true, value = "指定されたページ")
+        @RequestParam("page") final int page,
+        @ApiParam(required = true, value = "ページサイズ")
+        @RequestParam("size") final int size,
+        @ApiParam(value = "タスク開始時間")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @RequestParam(value = "startTime", required = false) final LocalDateTime startTime,
+        @ApiParam(required = true, value = "タスク終了時間")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @RequestParam(value = "endTime") final LocalDateTime endTime) {
 
         //TODO JWTからaccountIdを取得する。
-        return this.service.findByAccountId(1L, pageReq);
+        final var accountId = 1L;
+        final var pageReq = PageRequest.of(page, size);
+
+        return this.service.findPlannedTasks(accountId,
+                Objects.nonNull(startTime) ? ZonedDateTime.of(startTime, ZoneId.systemDefault()) : null,
+                ZonedDateTime.of(endTime, ZoneId.systemDefault()), pageReq)
+            .map(x -> x.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(x));
     }
 
     /**
@@ -114,7 +131,7 @@ public class PlannedTaskController {
         @ApiResponse(code = 204, message = "計画済みタスクの削除成功"),
         @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
         @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
-        @ApiResponse(code = 404, message = "計画済みのタスクが見つからない", response = ApiErrorResponse.class),
+        @ApiResponse(code = 404, message = "計画済みのタスクが見つからない"),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
     public Mono<ResponseEntity<Void>> delete(
