@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import jp.co.havetodo.domain.repo.conv.AccountReadConverter;
+import jp.co.havetodo.domain.repo.conv.PlannedTaskReadConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +48,7 @@ public class TestConfig extends AbstractR2dbcConfiguration {
     protected List<Object> getCustomConverters() {
         final var converterList = new ArrayList<>();
         converterList.add(new AccountReadConverter());
+        converterList.add(new PlannedTaskReadConverter());
         return converterList;
     }
 
