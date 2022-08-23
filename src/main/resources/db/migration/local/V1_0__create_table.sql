@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS public.executed_task_status
 
 COMMENT ON TABLE public.executed_task_status IS '実行済みタスクのステータス';
 
-COMMENT ON COLUMN public.executed_task_status.name IS '未達成=NOT_ACHIVED、 達成=ACHIVED、運営都合キャンセル=CANCELED';
+COMMENT ON COLUMN public.executed_task_status.name IS '未達成=NOT_ACHIEVED、 達成=ACHIEVED、運営都合キャンセル=CANCELED';
 
 ALTER TABLE
     public.executed_task_status
