@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
@@ -16,7 +17,6 @@ import jp.co.havetodo.api.payload.response.PlannedTaskResponse;
 import jp.co.havetodo.domain.service.PlannedTaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -79,7 +79,7 @@ public class PlannedTaskController {
         @ApiResponse(code = 404, message = "計画済みのタスクが見つからなかった時"),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<ResponseEntity<Page<PlannedTaskResponse>>> getAll(
+    public Mono<ResponseEntity<List<PlannedTaskResponse>>> getAll(
         @ApiParam(required = true, value = "指定されたページ")
         @RequestParam("page") final int page,
         @ApiParam(required = true, value = "ページサイズ")
@@ -98,8 +98,7 @@ public class PlannedTaskController {
         return this.service.findPlannedTasks(accountId,
                 Objects.nonNull(startTime) ? ZonedDateTime.of(startTime, ZoneId.systemDefault()) : null,
                 ZonedDateTime.of(endTime, ZoneId.systemDefault()), pageReq)
-            .map(x -> x.getContent().isEmpty() ? ResponseEntity.notFound().build()
-                : ResponseEntity.ok(x));
+            .map(x -> x.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(x));
     }
 
     /**
