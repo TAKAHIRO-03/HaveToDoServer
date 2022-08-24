@@ -32,9 +32,11 @@ VALUES ('hogehoge@example.com', 'ROLE_ADMIN'),
 -- INSERT planned_task
 INSERT INTO public.planned_task(account_id, title, description, start_time, end_time, cost,
                                 is_repeat)
-VALUES (1, 'タスク1', 'タスク1の説明です。タスク1の説明です。タスク1の説明です。タスク1の説明です。', '2019/03/01 10:00:00',
-        '2019/03/01 12:00:00', 1000.0, false),
-       (1, 'タスク2', 'タスク2の説明です。タスク2の説明です。タスク2の説明です。タスク2の説明です。', '2019/03/02 10:00:00',
-        '2019/03/02 12:00:00', 1000.0, false);
+VALUES (1, 'タスク1', 'タスク1の説明です。タスク1の説明です。タスク1の説明です。タスク1の説明です。', now(),
+        now() + INTERVAL '3 hours', 1000.0, false),
+       (1, 'タスク2', 'タスク2の説明です。タスク2の説明です。タスク2の説明です。タスク2の説明です。', now() + INTERVAL '1 day',
+        now() + INTERVAL '1 day 1 hours', 1000.0, false),
+       (1, 'タスク2', 'タスク2の説明です。タスク2の説明です。タスク2の説明です。タスク2の説明です。', now() + INTERVAL '1 day 2 hours',
+        now() + INTERVAL '1 day 3 hours', 1000.0, false);
 
 COMMIT;

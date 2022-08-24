@@ -9,3 +9,5 @@ spring:
     name: havetodo #app name
   profiles:
     active: ${PROFILE:local} #profile
+  flyway:
+    clean-on-validation-error: false
