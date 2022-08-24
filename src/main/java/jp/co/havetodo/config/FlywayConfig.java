@@ -15,12 +15,16 @@ public class FlywayConfig {
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
         return new Flyway(Flyway.configure()
-                .baselineOnMigrate(Boolean.valueOf(env.getRequiredProperty("spring.flyway.baseline-on-migrate")))
-                .dataSource(
-                        env.getRequiredProperty("spring.flyway.url"),
-                        env.getRequiredProperty("spring.flyway.user"),
-                        env.getRequiredProperty("spring.flyway.password"))
-                .locations(env.getRequiredProperty("spring.flyway.locations"))
-        );
+            .baselineOnMigrate(
+                Boolean.valueOf(this.env.getRequiredProperty("spring.flyway.baseline-on-migrate")))
+            .dataSource(
+                this.env.getRequiredProperty("spring.flyway.url"),
+                this.env.getRequiredProperty("spring.flyway.user"),
+                this.env.getRequiredProperty("spring.flyway.password"))
+            .locations(this.env.getRequiredProperty("spring.flyway.locations"))
+            .cleanOnValidationError(
+                Boolean.valueOf(
+                    this.env.getRequiredProperty("spring.flyway.clean-on-validation-error"))
+            ));
     }
 }
