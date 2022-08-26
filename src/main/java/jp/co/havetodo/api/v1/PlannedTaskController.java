@@ -76,7 +76,7 @@ public class PlannedTaskController {
         @ApiResponse(code = 200, message = "計画済みタスク返却", response = PlannedTaskResponse.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
         @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
-        @ApiResponse(code = 404, message = "計画済みのタスクが見つからなかった時"),
+        @ApiResponse(code = 204, message = "計画済みのタスクが見つからなかった時"),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
     public Mono<ResponseEntity<List<PlannedTaskResponse>>> getAll(
@@ -98,7 +98,7 @@ public class PlannedTaskController {
         return this.service.findPlannedTasks(accountId,
                 Objects.nonNull(startTime) ? ZonedDateTime.of(startTime, ZoneId.systemDefault()) : null,
                 ZonedDateTime.of(endTime, ZoneId.systemDefault()), pageReq)
-            .map(x -> x.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(x));
+            .map(x -> x.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(x));
     }
 
     /**

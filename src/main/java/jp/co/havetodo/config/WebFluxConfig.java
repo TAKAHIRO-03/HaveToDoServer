@@ -19,13 +19,16 @@ public class WebFluxConfig implements WebFluxConfigurer {
     public void configureArgumentResolvers(final ArgumentResolverConfigurer configurer) {
         configurer.addCustomResolver(new ReactivePageableHandlerMethodArgumentResolver());
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8888")
-                .allowedMethods("GET", "POST", "PATCH", "DELETE")
-                .allowedHeaders("Content-Type", "Origin", "Accept");
+            .allowedOrigins("http://localhost:8888", "http://client-ctr:8888")
+            .allowedMethods("GET", "POST", "PATCH", "DELETE")
+            .allowedHeaders("Content-Type", "Origin", "Accept");
     }
 
 }
