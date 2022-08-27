@@ -29,8 +29,8 @@ INSERT INTO public.account_roles(username, roles)
 VALUES ('hogehoge@example.com', 'ROLE_ADMIN'),
        ('hogehoge@example.com', 'ROLE_USER');
 
--- INSERT planned_task
-INSERT INTO public.planned_task(account_id, title, description, start_time, end_time, cost,
+-- INSERT task
+INSERT INTO public.task(account_id, title, description, start_time, end_time, cost,
                                 is_repeat)
 VALUES (1, 'タスク1', 'タスク1の説明です。タスク1の説明です。タスク1の説明です。タスク1の説明です。', now(),
         now() + INTERVAL '3 hours', 1000.0, false),

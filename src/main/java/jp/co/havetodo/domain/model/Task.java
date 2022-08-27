@@ -15,8 +15,8 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Value
 @Builder
-@Table(value = "planned_task")
-public class PlannedTask implements Serializable {
+@Table(value = "task")
+public class Task implements Serializable {
 
     @Id
     @Column(value = "id")

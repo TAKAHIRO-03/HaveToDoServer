@@ -8,11 +8,11 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
-import jp.co.havetodo.api.payload.request.PlannedTaskRequest;
+import jp.co.havetodo.api.payload.request.TaskRequest;
 import jp.co.havetodo.api.payload.response.ApiErrorResponse;
-import jp.co.havetodo.api.payload.response.PlannedTaskResponse;
-import jp.co.havetodo.service.PlannedTaskService;
-import jp.co.havetodo.service.model.FindPlannedTasksInputData;
+import jp.co.havetodo.api.payload.response.TaskResponse;
+import jp.co.havetodo.service.TaskService;
+import jp.co.havetodo.service.model.FindTasksInputData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -37,11 +37,11 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping(path = "/api/v1.0/plannedTasks", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1.0/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
-public class PlannedTaskController {
+public class TaskController {
 
-    private final PlannedTaskService service;
+    private final TaskService service;
 
     private final ConversionService converter;
 
@@ -54,13 +54,13 @@ public class PlannedTaskController {
     @GetMapping("/{id}")
     @ApiOperation(value = "計画済みの単一のタスク取得", notes = "ユーザーの計画済みタスクを１つ取得する。過去の計画済みタスクは取得しない。")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "計画済みタスク返却", response = PlannedTaskResponse.class),
+        @ApiResponse(code = 200, message = "計画済みタスク返却", response = TaskResponse.class),
         @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
         @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
         @ApiResponse(code = 404, message = "タスク"),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<ResponseEntity<PlannedTaskResponse>> get(
+    public Mono<ResponseEntity<TaskResponse>> get(
         @ApiParam(required = true, value = "取得対象となるID")
         @PositiveOrZero @PathVariable final Long id) {
         return Mono.just(ResponseEntity.ok(null));
@@ -74,13 +74,13 @@ public class PlannedTaskController {
     @GetMapping
     @ApiOperation(value = "計画済みのタスク取得", notes = "ユーザーの計画済みタスクを全て取得する。過去の計画済みタスクは取得しない。")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "計画済みタスク返却", response = PlannedTaskResponse.class, responseContainer = "List"),
+        @ApiResponse(code = 200, message = "計画済みタスク返却", response = TaskResponse.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "パラメーターが不正な時", response = ApiErrorResponse.class),
         @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
         @ApiResponse(code = 204, message = "計画済みのタスクが見つからなかった時"),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<ResponseEntity<List<PlannedTaskResponse>>> getAll(
+    public Mono<ResponseEntity<List<TaskResponse>>> getAll(
         @ApiParam(required = true, value = "指定されたページ")
         @RequestParam("page") final int page,
         @ApiParam(required = true, value = "ページサイズ")
@@ -95,12 +95,12 @@ public class PlannedTaskController {
         //TODO JWTからaccountIdを取得する。
         final var accountId = 1L;
         final var pageReq = PageRequest.of(page, size);
-        final var findPlannedTasksInputData = new FindPlannedTasksInputData(accountId, pageReq,
+        final var findTasksInputData = new FindTasksInputData(accountId, pageReq,
             startTime,
             endTime);
 
-        return this.service.findPlannedTasks(findPlannedTasksInputData)
-            .mapNotNull(x -> this.converter.convert(x, PlannedTaskResponse.class))
+        return this.service.findTasks(findTasksInputData)
+            .mapNotNull(x -> this.converter.convert(x, TaskResponse.class))
             .collectList()
             .map(x -> x.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(x));
     }
@@ -119,7 +119,7 @@ public class PlannedTaskController {
         @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<ResponseEntity<Void>> create(@Valid @RequestBody final PlannedTaskRequest req) {
+    public Mono<ResponseEntity<Void>> create(@Valid @RequestBody final TaskRequest req) {
         return Mono.just(ResponseEntity.created(null).build());
     }
 

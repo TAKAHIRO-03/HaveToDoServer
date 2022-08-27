@@ -59,7 +59,7 @@ public class Account implements Serializable {
 
     @NonNull
     @NotNull
-    List<PlannedTask> plannedTasks;
+    List<Task> tasks;
 
     @NonNull
     @NotNull

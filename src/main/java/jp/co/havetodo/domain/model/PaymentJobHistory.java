@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table(value = "payment_job_history")
 public record PaymentJobHistory(
-    @Id @Column(value = "planned_task_id") @NonNull @NotNull Long plannedTaskId,
+    @Id @Column(value = "task_id") @NonNull @NotNull Long taskId,
     @Column(value = "executed_time") @NonNull @NotNull ZonedDateTime executedTime)
     implements Serializable {
 

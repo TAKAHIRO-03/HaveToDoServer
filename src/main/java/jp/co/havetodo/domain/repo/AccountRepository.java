@@ -9,7 +9,7 @@ public interface AccountRepository extends ReactiveCrudRepository<Account, Long>
 
     @Override
     @Query(
-        "SELECT account.*, timezones.*, oauth_provider.*, currency.*, planned_task.* "
+        "SELECT account.*, timezones.*, oauth_provider.*, currency.*, task.* "
             + "FROM account JOIN timezones ON timezones.name = account.timezones_name "
             + "LEFT JOIN oauth_provider ON oauth_provider.type = account.oauth_provider_type "
             + "JOIN currency ON currency.iso_code = account.currency_iso_code ")

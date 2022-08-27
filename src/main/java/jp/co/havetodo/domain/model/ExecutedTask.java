@@ -11,7 +11,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table(value = "executed_task")
 public record ExecutedTask(
-    @Id @Column(value = "planned_task_id") @NonNull @NotNull Long plannedTaskId,
+    @Id @Column(value = "task_id") @NonNull @NotNull Long taskId,
     @Column(value = "started_time") @NonNull @NotNull ZonedDateTime startedTime,
     @Column(value = "ended_time") @NonNull @NotNull ZonedDateTime endedTime,
     @Transient @NonNull @NotNull ExecutedTaskStatus executedTaskStatus) implements

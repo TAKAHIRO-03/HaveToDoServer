@@ -22,13 +22,13 @@ import org.springframework.test.context.TestPropertySource;
 @DataR2dbcTest
 @Import({TestConfig.class})
 @TestPropertySource("classpath:application.yml")
-public class PlannedTaskRepositoryTest {
+public class TaskRepositoryTest {
 
     @Autowired
     private R2dbcEntityTemplate template;
 
     @Autowired
-    private PlannedTaskRepository plannedTaskRepo;
+    private TaskRepository taskRepo;
 
     @BeforeAll
     public static void setup(@Autowired final R2dbcEntityTemplate template) throws Exception {
@@ -54,7 +54,7 @@ public class PlannedTaskRepositoryTest {
         final var endTime = ZonedDateTime.of(LocalDateTime.of(2019, 3, 2, 23, 59, 59),
             ZoneId.systemDefault().normalized());
 
-        this.plannedTaskRepo.findToDayTasks(accountId, startTime, endTime, page.getPageSize(),
+        this.taskRepo.findToDayTasks(accountId, startTime, endTime, page.getPageSize(),
                 page.getOffset())
             .log()
             .collectList()

@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS public.success_auth CASCADE;
 
 DROP TABLE IF EXISTS public.failed_auth CASCADE;
 
-DROP TABLE IF EXISTS public.planned_task CASCADE;
+DROP TABLE IF EXISTS public.task CASCADE;
 
 DROP TABLE IF EXISTS public.executed_task CASCADE;
 
@@ -177,7 +177,7 @@ ALTER TABLE
     public.failed_auth
     OWNER TO havetodouser;
 
-CREATE TABLE IF NOT EXISTS public.planned_task
+CREATE TABLE IF NOT EXISTS public.task
 (
     id          BIGSERIAL PRIMARY KEY,
     account_id  BIGINT       NOT NULL,
@@ -194,26 +194,26 @@ CREATE TABLE IF NOT EXISTS public.planned_task
     FOREIGN KEY (account_id) REFERENCES public.account (id) ON DELETE CASCADE
 );
 
-COMMENT ON TABLE public.planned_task IS '計画済みタスク情報。';
+COMMENT ON TABLE public.task IS '計画済みタスク情報。';
 
-COMMENT ON COLUMN public.planned_task.id IS '識別子。';
+COMMENT ON COLUMN public.task.id IS '識別子。';
 
-COMMENT ON COLUMN public.planned_task.account_id IS 'アカウントID。';
+COMMENT ON COLUMN public.task.account_id IS 'アカウントID。';
 
-COMMENT ON COLUMN public.planned_task.title IS 'タイトル。';
+COMMENT ON COLUMN public.task.title IS 'タイトル。';
 
-COMMENT ON COLUMN public.planned_task.description IS 'タスクの説明';
+COMMENT ON COLUMN public.task.description IS 'タスクの説明';
 
-COMMENT ON COLUMN public.planned_task.start_time IS '開始日時。';
+COMMENT ON COLUMN public.task.start_time IS '開始日時。';
 
-COMMENT ON COLUMN public.planned_task.end_time IS '終了日時。';
+COMMENT ON COLUMN public.task.end_time IS '終了日時。';
 
-COMMENT ON COLUMN public.planned_task.cost IS '金額。';
+COMMENT ON COLUMN public.task.cost IS '金額。';
 
-COMMENT ON COLUMN public.planned_task.is_repeat IS '繰り返し登録されたタスク=true, 繰り返し登録されていないタスク=false';
+COMMENT ON COLUMN public.task.is_repeat IS '繰り返し登録されたタスク=true, 繰り返し登録されていないタスク=false';
 
 ALTER TABLE
-    public.planned_task
+    public.task
     OWNER TO havetodouser;
 
 CREATE TABLE IF NOT EXISTS public.executed_task_status
@@ -231,17 +231,17 @@ ALTER TABLE
 
 CREATE TABLE IF NOT EXISTS public.executed_task
 (
-    planned_task_id           BIGINT PRIMARY KEY,
+    task_id           BIGINT PRIMARY KEY,
     started_time              TIMESTAMPTZ,
     ended_time                TIMESTAMPTZ,
     executed_task_status_name VARCHAR(30) NOT NULL DEFAULT 'CANCELED',
-    FOREIGN KEY (planned_task_id) REFERENCES public.planned_task (id) ON DELETE CASCADE,
+    FOREIGN KEY (task_id) REFERENCES public.task (id) ON DELETE CASCADE,
     FOREIGN KEY (executed_task_status_name) REFERENCES public.executed_task_status (name) ON DELETE CASCADE
 );
 
 COMMENT ON TABLE public.executed_task IS '実行済みタスク情報。';
 
-COMMENT ON COLUMN public.executed_task.planned_task_id IS '計画済みタスクID。';
+COMMENT ON COLUMN public.executed_task.task_id IS '計画済みタスクID。';
 
 COMMENT ON COLUMN public.executed_task.started_time IS '開始された日時。NULL=開始されていない。';
 
@@ -255,14 +255,14 @@ ALTER TABLE
 
 CREATE TABLE IF NOT EXISTS public.payment_job_history
 (
-    planned_task_id BIGINT PRIMARY KEY,
+    task_id BIGINT PRIMARY KEY,
     executed_time   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (planned_task_id) REFERENCES public.planned_task (id) ON DELETE CASCADE
+    FOREIGN KEY (task_id) REFERENCES public.task (id) ON DELETE CASCADE
 );
 
 COMMENT ON TABLE public.payment_job_history IS '支払いのジョブ履歴。';
 
-COMMENT ON COLUMN public.payment_job_history.planned_task_id IS '計画済みタスクID。';
+COMMENT ON COLUMN public.payment_job_history.task_id IS '計画済みタスクID。';
 
 COMMENT ON COLUMN public.payment_job_history.executed_time IS 'ジョブが実行された日時。';
 

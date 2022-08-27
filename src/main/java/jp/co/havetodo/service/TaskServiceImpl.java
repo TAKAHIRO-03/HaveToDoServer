@@ -1,9 +1,9 @@
 package jp.co.havetodo.service;
 
 import java.util.Objects;
-import jp.co.havetodo.domain.model.PlannedTask;
-import jp.co.havetodo.domain.repo.PlannedTaskRepository;
-import jp.co.havetodo.service.model.FindPlannedTasksInputData;
+import jp.co.havetodo.domain.model.Task;
+import jp.co.havetodo.domain.repo.TaskRepository;
+import jp.co.havetodo.service.model.FindTasksInputData;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +14,13 @@ import reactor.core.publisher.Flux;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PlannedTaskServiceImpl implements PlannedTaskService {
+public class TaskServiceImpl implements TaskService {
 
-    private final PlannedTaskRepository repo;
+    private final TaskRepository repo;
 
     @Override
-    public Flux<PlannedTask> findPlannedTasks(
-        @NonNull @NotNull final FindPlannedTasksInputData inputData) {
+    public Flux<Task> findTasks(
+        @NonNull @NotNull final FindTasksInputData inputData) {
 
         if (Objects.isNull(inputData.startTime())) {
             return this.repo.findAfterTomorrowTasks(inputData.accountId(), inputData.endTime(),

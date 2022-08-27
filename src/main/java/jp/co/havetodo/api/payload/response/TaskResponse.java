@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 /**
  * 計画済みタスクを返却するときのレスポンスボディ
  */
-public record PlannedTaskResponse(
+public record TaskResponse(
     @ApiModelProperty(value = "タスクID", example = "1")
     Long id,
     @ApiModelProperty(value = "アカウントID", example = "1")

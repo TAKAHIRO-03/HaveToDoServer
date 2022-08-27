@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * 計画済み習慣を登録する時のリクエストボディ
  */
-public record PlannedTaskRequest(
+public record TaskRequest(
         @NotBlank
         @Size(min = 1, max = 100)
         @ApiModelProperty(value = "習慣のタイトル", example = "ランニング", required = true)

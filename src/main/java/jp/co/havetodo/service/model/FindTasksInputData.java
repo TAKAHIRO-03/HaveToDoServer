@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 
-public record FindPlannedTasksInputData(
+public record FindTasksInputData(
     @NonNull @NotNull Long accountId,
     @NonNull @NotNull Pageable page,
     @Nullable ZonedDateTime startTime,

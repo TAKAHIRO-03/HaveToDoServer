@@ -40,7 +40,7 @@ public class AccountReadConverter implements Converter<Row, Account> {
             .oauthProvider(oauthProvider)
             .createdTime(r.get("created_time", ZonedDateTime.class))
             .updatedTime(r.get("updated_time", ZonedDateTime.class))
-            .plannedTasks(Collections.emptyList())
+            .tasks(Collections.emptyList())
             .failedAuths(Collections.emptyList())
             .build();
 
