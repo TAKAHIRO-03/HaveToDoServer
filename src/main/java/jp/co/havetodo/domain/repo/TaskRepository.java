@@ -1,6 +1,6 @@
 package jp.co.havetodo.domain.repo;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import jp.co.havetodo.domain.model.Task;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
@@ -16,7 +16,7 @@ public interface TaskRepository extends ReactiveCrudRepository<Task, Long> {
             + "AND task.end_time BETWEEN :startTime AND :endTime "
             + "ORDER BY task.start_time "
             + "LIMIT :limit OFFSET :offset")
-    Flux<Task> findToDayTasks(Long accountId, ZonedDateTime startTime, ZonedDateTime endTime,
+    Flux<Task> findToDayTasks(Long accountId, LocalDateTime startTime, LocalDateTime endTime,
         int limit, long offset);
 
     @Query(
@@ -26,7 +26,7 @@ public interface TaskRepository extends ReactiveCrudRepository<Task, Long> {
             + "AND :endTime <= task.end_time "
             + "ORDER BY task.start_time "
             + "LIMIT :limit OFFSET :offset")
-    Flux<Task> findAfterTomorrowTasks(Long accountId, ZonedDateTime endTime, int limit,
+    Flux<Task> findAfterTomorrowTasks(Long accountId, LocalDateTime endTime, int limit,
         long offset);
 
 }

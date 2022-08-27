@@ -4,8 +4,6 @@ import io.micrometer.core.instrument.util.IOUtils;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import jp.co.havetodo.config.TestConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -49,10 +47,8 @@ public class TaskRepositoryTest {
 
         final var accountId = 1L;
         final var page = PageRequest.of(0, 100);
-        final var startTime = ZonedDateTime.of(LocalDateTime.of(2019, 3, 2, 0, 0, 0),
-            ZoneId.systemDefault().normalized());
-        final var endTime = ZonedDateTime.of(LocalDateTime.of(2019, 3, 2, 23, 59, 59),
-            ZoneId.systemDefault().normalized());
+        final var startTime = LocalDateTime.of(2019, 3, 2, 0, 0, 0);
+        final var endTime = LocalDateTime.of(2019, 3, 2, 23, 59, 59);
 
         this.taskRepo.findToDayTasks(accountId, startTime, endTime, page.getPageSize(),
                 page.getOffset())

@@ -1,7 +1,7 @@
 package jp.co.havetodo.domain.model;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
@@ -50,12 +50,12 @@ public class Account implements Serializable {
     @NonNull
     @NotNull
     @Column(value = "created_time")
-    ZonedDateTime createdTime;
+    LocalDateTime createdTime;
 
     @NonNull
     @NotNull
     @Column(value = "updated_time")
-    ZonedDateTime updatedTime;
+    LocalDateTime updatedTime;
 
     @NonNull
     @NotNull

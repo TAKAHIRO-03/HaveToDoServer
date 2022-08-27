@@ -2,7 +2,7 @@ package jp.co.havetodo.domain.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.NonNull;
@@ -42,12 +42,12 @@ public class Task implements Serializable {
     @Column(value = "start_time")
     @NonNull
     @NotNull
-    ZonedDateTime startTime;
+    LocalDateTime startTime;
 
     @Column(value = "end_time")
     @NonNull
     @NotNull
-    ZonedDateTime endTime;
+    LocalDateTime endTime;
 
     @Column(value = "cost")
     @NonNull

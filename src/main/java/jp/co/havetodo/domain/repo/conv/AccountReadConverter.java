@@ -3,7 +3,7 @@ package jp.co.havetodo.domain.repo.conv;
 
 import io.r2dbc.postgresql.codec.Interval;
 import io.r2dbc.spi.Row;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Objects;
 import jp.co.havetodo.domain.model.Account;
@@ -38,8 +38,8 @@ public class AccountReadConverter implements Converter<Row, Account> {
             .timezones(timezones)
             .currency(currency)
             .oauthProvider(oauthProvider)
-            .createdTime(r.get("created_time", ZonedDateTime.class))
-            .updatedTime(r.get("updated_time", ZonedDateTime.class))
+            .createdTime(r.get("created_time", LocalDateTime.class))
+            .updatedTime(r.get("updated_time", LocalDateTime.class))
             .tasks(Collections.emptyList())
             .failedAuths(Collections.emptyList())
             .build();

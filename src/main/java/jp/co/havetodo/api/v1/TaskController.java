@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
@@ -87,10 +87,10 @@ public class TaskController {
         @RequestParam("size") final int size,
         @ApiParam(value = "タスク開始時間")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        @RequestParam(value = "startTime", required = false) final ZonedDateTime startTime,
+        @RequestParam(value = "startTime", required = false) final LocalDateTime startTime,
         @ApiParam(required = true, value = "タスク終了時間")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        @RequestParam(value = "endTime") final ZonedDateTime endTime) {
+        @RequestParam(value = "endTime") final LocalDateTime endTime) {
 
         //TODO JWTからaccountIdを取得する。
         final var accountId = 1L;
@@ -120,6 +120,7 @@ public class TaskController {
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
     public Mono<ResponseEntity<Void>> create(@Valid @RequestBody final TaskRequest req) {
+
         return Mono.just(ResponseEntity.created(null).build());
     }
 

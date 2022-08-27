@@ -6,7 +6,7 @@ import org.springframework.util.CollectionUtils;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -23,12 +23,12 @@ public record TaskRequest(
         @NotNull
         @FutureOrPresent
         @ApiModelProperty(value = "習慣の開始時間", example = "2015-12-15T23:30:59.999+09:00[Asia/Tokyo]", required = true)
-        ZonedDateTime startTime,
+        LocalDateTime startTime,
 
         @NotNull
         @FutureOrPresent
         @ApiModelProperty(value = "習慣の終了時間", example = "2015-12-16T00:30:59.999+09:00[Asia/Tokyo]", required = true)
-        ZonedDateTime endTime,
+        LocalDateTime endTime,
 
         @NotNull
         @DecimalMin(value = "0")
