@@ -4,19 +4,18 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import jp.co.havetodo.api.payload.request.PlannedTaskRequest;
 import jp.co.havetodo.api.payload.response.ApiErrorResponse;
 import jp.co.havetodo.api.payload.response.PlannedTaskResponse;
-import jp.co.havetodo.domain.service.PlannedTaskService;
+import jp.co.havetodo.service.PlannedTaskService;
+import jp.co.havetodo.service.model.FindPlannedTasksInputData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -43,6 +42,8 @@ import reactor.core.publisher.Mono;
 public class PlannedTaskController {
 
     private final PlannedTaskService service;
+
+    private final ConversionService converter;
 
     /**
      * 計画済みの単一のタスク取得処理
@@ -86,18 +87,21 @@ public class PlannedTaskController {
         @RequestParam("size") final int size,
         @ApiParam(value = "タスク開始時間")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        @RequestParam(value = "startTime", required = false) final LocalDateTime startTime,
+        @RequestParam(value = "startTime", required = false) final ZonedDateTime startTime,
         @ApiParam(required = true, value = "タスク終了時間")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        @RequestParam(value = "endTime") final LocalDateTime endTime) {
+        @RequestParam(value = "endTime") final ZonedDateTime endTime) {
 
         //TODO JWTからaccountIdを取得する。
         final var accountId = 1L;
         final var pageReq = PageRequest.of(page, size);
+        final var findPlannedTasksInputData = new FindPlannedTasksInputData(accountId, pageReq,
+            startTime,
+            endTime);
 
-        return this.service.findPlannedTasks(accountId,
-                Objects.nonNull(startTime) ? ZonedDateTime.of(startTime, ZoneId.systemDefault()) : null,
-                ZonedDateTime.of(endTime, ZoneId.systemDefault()), pageReq)
+        return this.service.findPlannedTasks(findPlannedTasksInputData)
+            .mapNotNull(x -> this.converter.convert(x, PlannedTaskResponse.class))
+            .collectList()
             .map(x -> x.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(x));
     }
 

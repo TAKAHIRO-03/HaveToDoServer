@@ -1,4 +1,4 @@
-package jp.co.havetodo.domain.service.mapper;
+package jp.co.havetodo.service.mapper;
 
 import jp.co.havetodo.api.payload.response.PlannedTaskResponse;
 import jp.co.havetodo.domain.model.PlannedTask;
