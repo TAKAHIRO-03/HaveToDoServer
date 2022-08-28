@@ -8,14 +8,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
+import jp.co.havetodo.api.mapper.TaskMapper;
 import jp.co.havetodo.api.payload.request.TaskRequest;
 import jp.co.havetodo.api.payload.response.ApiErrorResponse;
 import jp.co.havetodo.api.payload.response.TaskResponse;
+import jp.co.havetodo.domain.repo.AccountRepository;
 import jp.co.havetodo.service.TaskService;
 import jp.co.havetodo.service.model.FindTasksInputData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -43,7 +44,12 @@ public class TaskController {
 
     private final TaskService service;
 
-    private final ConversionService converter;
+    private final TaskMapper mapper;
+
+    /**
+     * TODO 本来はSpring Security経由でアカウント情報を取得するのが正しいが未実装のため一旦Repository経由で取得
+     */
+    private final AccountRepository accountRepo;
 
     /**
      * 計画済みの単一のタスク取得処理
@@ -95,12 +101,11 @@ public class TaskController {
         //TODO JWTからaccountIdを取得する。
         final var accountId = 1L;
         final var pageReq = PageRequest.of(page, size);
-        final var findTasksInputData = new FindTasksInputData(accountId, pageReq,
-            startTime,
+        final var findTasksInputData = new FindTasksInputData(accountId, pageReq, startTime,
             endTime);
 
         return this.service.findTasks(findTasksInputData)
-            .mapNotNull(x -> this.converter.convert(x, TaskResponse.class))
+            .mapNotNull(x -> this.mapper.taskToTaskResponse(x))
             .collectList()
             .map(x -> x.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(x));
     }
@@ -120,6 +125,10 @@ public class TaskController {
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
     public Mono<ResponseEntity<Void>> create(@Valid @RequestBody final TaskRequest req) {
+
+        final var account = this.accountRepo.findById(1L).block();
+        final var createTasksInputData = this.mapper.taskRequestToCreateTaskInputData(req, account);
+        this.service.createTask(createTasksInputData);
 
         return Mono.just(ResponseEntity.created(null).build());
     }

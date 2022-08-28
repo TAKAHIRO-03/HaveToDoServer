@@ -1,68 +1,82 @@
 package jp.co.havetodo.api.payload.request;
 
 import io.swagger.annotations.ApiModelProperty;
+import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Set;
+import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import jp.co.havetodo.api.payload.request.vali.ValidEnum;
 import org.springframework.util.CollectionUtils;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
 /**
- * 計画済み習慣を登録する時のリクエストボディ
+ * タスクを登録する時のリクエストボディ
  */
 public record TaskRequest(
-        @NotBlank
-        @Size(min = 1, max = 100)
-        @ApiModelProperty(value = "習慣のタイトル", example = "ランニング", required = true)
-        String title,
+    @NotBlank
+    @Size(min = 1, max = 100)
+    @ApiModelProperty(value = "タスクのタイトル", example = "ランニング", required = true)
+    String title,
 
-        @NotNull
-        @FutureOrPresent
-        @ApiModelProperty(value = "習慣の開始時間", example = "2015-12-15T23:30:59.999+09:00[Asia/Tokyo]", required = true)
-        LocalDateTime startTime,
+    @NotBlank
+    @Size(min = 1, max = 100)
+    @ApiModelProperty(value = "タスクの説明", example = "ランニングを行います")
+    String description,
 
-        @NotNull
-        @FutureOrPresent
-        @ApiModelProperty(value = "習慣の終了時間", example = "2015-12-16T00:30:59.999+09:00[Asia/Tokyo]", required = true)
-        LocalDateTime endTime,
+    @NotNull
+    @FutureOrPresent
+    @ApiModelProperty(value = "タスクの開始時間", example = "2015-12-15T23:30:59.999", required = true)
+    LocalDateTime startTime,
 
-        @NotNull
-        @DecimalMin(value = "0")
-        @DecimalMax(value = "10000")
-        @Digits(integer = 5, fraction = 1)
-        @ApiModelProperty(value = "習慣計画時のお金", example = "1000.0", required = true)
-        BigDecimal cost,
+    @NotNull
+    @FutureOrPresent
+    @ApiModelProperty(value = "タスクの終了時間", example = "2015-12-16T00:30:59.999", required = true)
+    LocalDateTime endTime,
 
-        @ApiModelProperty(value = "リピートの有無", example = "true")
-        boolean isRepeat,
+    @NotNull
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "10000")
+    @Digits(integer = 5, fraction = 1)
+    @ApiModelProperty(value = "タスク計画時のお金", example = "1000.0", required = true)
+    BigDecimal cost,
 
-        @ApiModelProperty(value = "曜日に対応した数字。日:1, 月:2, 火:3, 水:4, 木:5, 金:6, 土:7", example = "[1]")
-        @Valid
-        List<@Min(1) @Max(7) Integer> repeatCalendar,
+    @ApiModelProperty(value = "リピートの有無", example = "true")
+    boolean isRepeat,
 
-        @Future
-        @ApiModelProperty(value = "いつまでリピートするかの最後の日付", example = "2015-12-31")
-        Date repeatEndTime
+    @ApiModelProperty(value = "曜日に対応した数字。日:1, 月:2, 火:3, 水:4, 木:5, 金:6, 土:7", example = "[1]")
+    @Valid
+    Set<@ValidEnum DayOfWeek> repeatDayOfWeek,
+
+    @Future
+    @ApiModelProperty(value = "いつまでリピートするかの最後の日付", example = "2015-12-31")
+    LocalDate repeatEndDate
 ) {
 
     @AssertTrue
-    public boolean isRepeatCalendarNotEmpty() {
+    public boolean isRepeatDayOfWeekNotEmpty() {
         if (!this.isRepeat/* when is "isRepeat" false, return true */) {
             return true;
         }
-        return !CollectionUtils.isEmpty(this.repeatCalendar);
+        return !CollectionUtils.isEmpty(this.repeatDayOfWeek);
     }
 
     @AssertTrue
-    public boolean isRepeatEndTimeNotNull() {
+    public boolean isRepeatEndDateNotNull() {
         if (!this.isRepeat/* when is "isRepeat" false, return true */) {
             return true;
         }
-        return Objects.nonNull(this.repeatEndTime);
+        return Objects.nonNull(this.repeatEndDate);
     }
 
 }

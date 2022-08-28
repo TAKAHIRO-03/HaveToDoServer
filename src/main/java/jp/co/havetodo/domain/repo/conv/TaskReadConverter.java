@@ -41,7 +41,7 @@ public class TaskReadConverter implements Converter<Row, Task> {
                 new PaymentJobHistory(r.get("payment_job_history_task_id", Long.class),
                     r.get("executed_time", LocalDateTime.class))) : Optional.empty();
 
-        return Task.builder()
+        final var task = Task.builder()
             .id(r.get("id", Long.class))
             .accountId(r.get("account_id", Long.class))
             .title(r.get("title", String.class))
@@ -50,9 +50,12 @@ public class TaskReadConverter implements Converter<Row, Task> {
             .endTime(r.get("end_time", LocalDateTime.class))
             .cost(r.get("cost", BigDecimal.class))
             .isRepeat(r.get("is_repeat", Boolean.class))
-            .executedTask(executedTask)
-            .paymentJobHistory(paymentJobHistory)
             .build();
+
+        task.setExecutedTask(executedTask);
+        task.setPaymentJobHistory(paymentJobHistory);
+
+        return task;
 
     }
 }
