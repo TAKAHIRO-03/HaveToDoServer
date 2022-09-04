@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import jp.co.havetodo.domain.model.Task;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface TaskRepository extends ReactiveCrudRepository<Task, Long> {
 
@@ -28,5 +30,10 @@ public interface TaskRepository extends ReactiveCrudRepository<Task, Long> {
             + "LIMIT :limit OFFSET :offset")
     Flux<Task> findAfterTomorrowTasks(Long accountId, LocalDateTime endTime, int limit,
         long offset);
+
+
+    @Override
+    @Transactional
+    Mono<Integer> save(Task entity);
 
 }

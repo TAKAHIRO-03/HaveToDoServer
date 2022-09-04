@@ -1,5 +1,7 @@
 package jp.co.havetodo.service;
 
+import io.r2dbc.postgresql.api.PostgresqlException;
+import java.util.List;
 import java.util.Objects;
 import jp.co.havetodo.domain.model.Task;
 import jp.co.havetodo.domain.repo.TaskRepository;
@@ -9,8 +11,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -39,8 +41,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @Transactional
-    public Mono<?> createTask(@NonNull @NotNull final CreateTaskInputData inputData) {
+    public Mono<List<Integer>> createTask(@NonNull @NotNull final CreateTaskInputData inputData) {
 
         final var task = Task.builder()
             .accountId(inputData.account().getId())
@@ -53,11 +54,16 @@ public class TaskServiceImpl implements TaskService {
             .build();
 
         if (CollectionUtils.isEmpty(inputData.repeatDayOfWeek())) {
-            return this.repo.save(task).mapNotNull(Task::getId);
+            return this.repo.save(task).map(List::of);
         }
 
-        final var tasks = task.createTasks(inputData.repeatDayOfWeek(), inputData.repeatEndDate());
-        return this.repo.saveAll(tasks).collectList();
+        return task.createTasks(inputData.repeatDayOfWeek(), inputData.repeatEndDate())
+            .flatMap(this.repo::save)
+            .doOnError(e ->
+                log.warn(((PostgresqlException) e.getCause()).getErrorDetails().toString())
+            )
+            .onErrorReturn(e -> e instanceof DataIntegrityViolationException, -1)
+            .collectList();
     }
 
 }

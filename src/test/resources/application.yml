@@ -5,3 +5,6 @@ spring:
     password: havetodopass
   flyway:
     enabled: false
+server:
+  error:
+    include-binding-errors: ALWAYS

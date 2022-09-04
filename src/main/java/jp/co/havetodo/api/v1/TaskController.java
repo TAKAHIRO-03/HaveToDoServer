@@ -6,19 +6,23 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import jp.co.havetodo.api.mapper.TaskMapper;
 import jp.co.havetodo.api.payload.request.TaskRequest;
 import jp.co.havetodo.api.payload.response.ApiErrorResponse;
 import jp.co.havetodo.api.payload.response.TaskResponse;
+import jp.co.havetodo.domain.model.Account;
 import jp.co.havetodo.domain.repo.AccountRepository;
 import jp.co.havetodo.service.TaskService;
 import jp.co.havetodo.service.model.FindTasksInputData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -50,6 +54,7 @@ public class TaskController {
      * TODO 本来はSpring Security経由でアカウント情報を取得するのが正しいが未実装のため一旦Repository経由で取得
      */
     private final AccountRepository accountRepo;
+    private Account testAccount;
 
     /**
      * 計画済みの単一のタスク取得処理
@@ -87,14 +92,14 @@ public class TaskController {
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
     public Mono<ResponseEntity<List<TaskResponse>>> getAll(
-        @ApiParam(required = true, value = "指定されたページ")
+        @ApiParam(required = true, value = "指定されたページ", example = "0")
         @RequestParam("page") final int page,
-        @ApiParam(required = true, value = "ページサイズ")
+        @ApiParam(required = true, value = "ページサイズ", example = "10")
         @RequestParam("size") final int size,
-        @ApiParam(value = "タスク開始時間")
+        @ApiParam(value = "タスク開始時間", example = "2015-12-15T00:00:00.000")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         @RequestParam(value = "startTime", required = false) final LocalDateTime startTime,
-        @ApiParam(required = true, value = "タスク終了時間")
+        @ApiParam(required = true, value = "タスク終了時間", example = "2015-12-15T23:59:59.999")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         @RequestParam(value = "endTime") final LocalDateTime endTime) {
 
@@ -105,9 +110,10 @@ public class TaskController {
             endTime);
 
         return this.service.findTasks(findTasksInputData)
-            .mapNotNull(x -> this.mapper.taskToTaskResponse(x))
+            .mapNotNull(this.mapper::taskToTaskResponse)
             .collectList()
-            .map(x -> x.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(x));
+            .mapNotNull(
+                x -> x.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(x));
     }
 
     /**
@@ -124,13 +130,21 @@ public class TaskController {
         @ApiResponse(code = 401, message = "認証・認可失敗", response = ApiErrorResponse.class),
         @ApiResponse(code = 500, message = "サーバー内部でエラーが発生", response = ApiErrorResponse.class)
     })
-    public Mono<ResponseEntity<Void>> create(@Valid @RequestBody final TaskRequest req) {
+    public Mono<ResponseEntity<Object>> create(@Valid @RequestBody final TaskRequest req) {
 
-        final var account = this.accountRepo.findById(1L).block();
-        final var createTasksInputData = this.mapper.taskRequestToCreateTaskInputData(req, account);
-        this.service.createTask(createTasksInputData);
-
-        return Mono.just(ResponseEntity.created(null).build());
+        final var account = this.accountRepo.findById(1L); // TODO アカウント取得処理
+        final var createTasksInputData = this.mapper.taskRequestToCreateTaskInputData(req,
+            this.testAccount);
+        return this.service.createTask(createTasksInputData)
+            .mapNotNull(t -> {
+                if (t.stream().allMatch(x -> x == -1)) {
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                } else {
+                    return ResponseEntity.created(null).build();
+                }
+            })
+            .onErrorReturn(e -> e instanceof DataIntegrityViolationException,
+                new ResponseEntity<>(HttpStatus.CONFLICT));
     }
 
     /**
@@ -154,6 +168,14 @@ public class TaskController {
         @ApiParam(required = true, value = "リピートされたものを削除するか")
         @RequestParam final boolean repeatDeleteFlg) {
         return Mono.just(ResponseEntity.noContent().build());
+    }
+
+    /**
+     * TODO Spring Security実装したら消す
+     */
+    @PostConstruct
+    public void init() {
+        this.testAccount = this.accountRepo.findById(1L).block();
     }
 
 }

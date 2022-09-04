@@ -21,6 +21,14 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
+    <logger name="org.springframework.validation" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="org.springframework.test.web.reactive.server" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
     <!-- 開発範囲をデバッグレベルにしファイルに出力したい場合 -->
     <logger name="jp.co.havetodo" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>

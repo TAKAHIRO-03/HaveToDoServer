@@ -16,8 +16,8 @@ public record CreateTaskInputData(
     @NonNull @NotNull LocalDateTime startTime,
     @NonNull @NotNull LocalDateTime endTime,
     @NonNull @NotNull BigDecimal cost,
-    @NonNull @NotNull boolean isRepeat,
-    @NonNull @NotNull Set<DayOfWeek> repeatDayOfWeek,
-    @NonNull @NotNull LocalDate repeatEndDate) {
+    boolean isRepeat,
+    Set<DayOfWeek> repeatDayOfWeek,
+    LocalDate repeatEndDate) {
 
 }

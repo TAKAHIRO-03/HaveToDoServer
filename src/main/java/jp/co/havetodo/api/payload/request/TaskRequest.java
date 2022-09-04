@@ -1,5 +1,6 @@
 package jp.co.havetodo.api.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -30,7 +31,7 @@ public record TaskRequest(
     String title,
 
     @NotBlank
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 1000)
     @ApiModelProperty(value = "タスクの説明", example = "ランニングを行います")
     String description,
 
@@ -45,7 +46,7 @@ public record TaskRequest(
     LocalDateTime endTime,
 
     @NotNull
-    @DecimalMin(value = "0")
+    @DecimalMin(value = "1")
     @DecimalMax(value = "10000")
     @Digits(integer = 5, fraction = 1)
     @ApiModelProperty(value = "タスク計画時のお金", example = "1000.0", required = true)
@@ -63,7 +64,8 @@ public record TaskRequest(
     LocalDate repeatEndDate
 ) {
 
-    @AssertTrue
+    @JsonIgnore
+    @AssertTrue(message = "when \"isRepeat\" is true, \"repeatDayOfWeek\" must not be empty.")
     public boolean isRepeatDayOfWeekNotEmpty() {
         if (!this.isRepeat/* when is "isRepeat" false, return true */) {
             return true;
@@ -71,7 +73,8 @@ public record TaskRequest(
         return !CollectionUtils.isEmpty(this.repeatDayOfWeek);
     }
 
-    @AssertTrue
+    @JsonIgnore
+    @AssertTrue(message = "when \"isRepeat\" is true, \"repeatEndDate\" must not be null.")
     public boolean isRepeatEndDateNotNull() {
         if (!this.isRepeat/* when is "isRepeat" false, return true */) {
             return true;
