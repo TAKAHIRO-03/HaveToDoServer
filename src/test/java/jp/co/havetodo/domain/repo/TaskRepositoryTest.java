@@ -28,7 +28,7 @@ import reactor.test.StepVerifier;
 @Slf4j
 @DataR2dbcTest
 @Import({TestConfig.class})
-@TestPropertySource("classpath:application.yml")
+@TestPropertySource("classpath:application-test.yml")
 @Testcontainers
 public class TaskRepositoryTest extends AbstractContainerBaseTest {
 

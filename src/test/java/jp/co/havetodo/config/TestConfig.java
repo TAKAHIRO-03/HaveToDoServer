@@ -15,9 +15,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.test.context.TestPropertySource;
 
 @Configuration
 @EnableAutoConfiguration
+@TestPropertySource("classpath:application-test.yml")
 public class TestConfig extends AbstractR2dbcConfiguration {
 
     @Value("${spring.r2dbc.url}")

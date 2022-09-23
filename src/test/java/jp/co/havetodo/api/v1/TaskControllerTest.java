@@ -35,15 +35,16 @@ import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @MockBeans({@MockBean(TaskService.class), @MockBean(AccountRepository.class)})
 @WebFluxTest(TaskController.class)
 @SpringJUnitConfig(TaskControllerTest.Config.class)
+@TestPropertySource("classpath:application-test.yml")
 public class TaskControllerTest {
 
     @Autowired
@@ -59,25 +60,8 @@ public class TaskControllerTest {
     static class Config {
 
         @Bean
-        TaskController taskController(final TaskMapper taskMapper, final TaskService service,
-            final AccountRepository accountRepo) {
-
-            final var account = Account.builder().id(1L)
-                .username("username")
-                .password("password")
-                .isLocked(false)
-                .timezones(new Timezones("japan", "japan", Interval.ZERO, false))
-                .currency(new Currency("yen", "yen", "yen", "yen"))
-                .oauthProvider(null)
-                .createdTime(LocalDateTime.now())
-                .updatedTime(LocalDateTime.now())
-                .tasks(Collections.emptyList())
-                .failedAuths(Collections.emptyList())
-                .build();
-
-            when(accountRepo.findById(1L)).thenReturn(Mono.just(account));
-
-            return new TaskController(service, taskMapper, accountRepo);
+        TaskController taskController(final TaskMapper taskMapper, final TaskService service) {
+            return new TaskController(service, taskMapper);
         }
 
         @Bean

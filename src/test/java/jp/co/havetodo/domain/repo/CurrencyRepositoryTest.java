@@ -18,12 +18,8 @@ import org.springframework.test.context.TestPropertySource;
 @Slf4j
 @DataR2dbcTest
 @Import({TestConfig.class})
-@TestPropertySource("classpath:application.yml")
+@TestPropertySource("classpath:application-test.yml")
 public class CurrencyRepositoryTest {
-
-    @Autowired
-    private R2dbcEntityTemplate template;
-
     @Autowired
     private CurrencyRepository currencyRepo;
 
