@@ -1,6 +1,7 @@
 package jp.co.havetodo.api.v1;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,8 +61,9 @@ public class TaskControllerTest {
     static class Config {
 
         @Bean
-        TaskController taskController(final TaskMapper taskMapper, final TaskService service) {
-            return new TaskController(service, taskMapper);
+        TaskController taskController(final TaskMapper taskMapper, final TaskService service,
+            final AccountRepository repository) {
+            return new TaskController(service, taskMapper, repository);
         }
 
         @Bean
@@ -85,6 +87,11 @@ public class TaskControllerTest {
         @Bean
         LoggingFilter loggingFilter(final ObjectMapper objectMapper) {
             return new LoggingFilter(objectMapper);
+        }
+
+        @Bean
+        AccountRepository repository() {
+            return mock(AccountRepository.class);
         }
 
     }

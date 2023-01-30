@@ -3,10 +3,12 @@ package jp.co.havetodo.domain.repo.conv;
 
 import static java.util.Objects.nonNull;
 
+import io.r2dbc.spi.ReadableMetadata;
 import io.r2dbc.spi.Row;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import jp.co.havetodo.domain.model.ExecutedTask;
 import jp.co.havetodo.domain.model.ExecutedTaskStatus;
 import jp.co.havetodo.domain.model.PaymentJobHistory;
@@ -21,9 +23,11 @@ public class TaskReadConverter implements Converter<Row, Task> {
     public Task convert(final Row r) {
 
         // fetch executed_task table
-        final var existsExecutedTaskTaskIdColumnAndNotNull = r.getMetadata()
-            .contains("executed_task_task_id") && nonNull(
-            r.get("executed_task_task_id", Long.class));
+        final var columnsStr = r.getMetadata().getColumnMetadatas().stream()
+            .map(ReadableMetadata::getName).toList();
+        final var existsExecutedTaskTaskIdColumnAndNotNull =
+            columnsStr.contains("executed_task_task_id") && nonNull(
+                r.get("executed_task_task_id", String.class));
         final Optional<ExecutedTask> executedTask =
             existsExecutedTaskTaskIdColumnAndNotNull ? Optional.of(
                 new ExecutedTask(r.get("executed_task_task_id", Long.class),
@@ -33,7 +37,7 @@ public class TaskReadConverter implements Converter<Row, Task> {
                 : Optional.empty();
 
         // fetch payment_job_history table
-        final var existsPaymentJobHistoryTaskIdColumnAndNotNull = r.getMetadata()
+        final var existsPaymentJobHistoryTaskIdColumnAndNotNull = columnsStr
             .contains("payment_job_history_task_id") && nonNull(
             r.get("payment_job_history_task_id", Long.class));
         final Optional<PaymentJobHistory> paymentJobHistory =

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiResponses;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import jp.co.havetodo.api.mapper.TaskMapper;
@@ -17,6 +18,7 @@ import jp.co.havetodo.api.payload.response.TaskResponse;
 import jp.co.havetodo.domain.model.Account;
 import jp.co.havetodo.domain.model.Currency;
 import jp.co.havetodo.domain.model.Timezones;
+import jp.co.havetodo.domain.repo.AccountRepository;
 import jp.co.havetodo.service.TaskService;
 import jp.co.havetodo.service.model.FindTasksInputData;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +53,13 @@ public class TaskController {
     private final TaskService service;
 
     private final TaskMapper mapper;
+
+    /**
+     * TODO 本来はSpring Security経由でアカウント情報を取得するのが正しいが未実装のため一旦Repository経由で取得
+     */
+    private final AccountRepository accountRepo;
+
+    private Account testAccount;
 
     /**
      * 計画済みの単一のタスク取得処理
@@ -129,7 +138,7 @@ public class TaskController {
     public Mono<ResponseEntity<Object>> create(@Valid @RequestBody final TaskRequest req) {
 
         final var createTasksInputData = this.mapper.taskRequestToCreateTaskInputData(req,
-            this.getAccount());
+            this.testAccount);
         return this.service.createTask(createTasksInputData)
             .mapNotNull(t -> {
                 if (t.stream().allMatch(x -> x == -1)) {
@@ -166,24 +175,30 @@ public class TaskController {
     }
 
     /**
-     *
      * TODO Spring Security実装したら消す
      *
      * @return アカウント
      */
-    private Account getAccount() {
-        return Account.builder().id(1L)
-            .username("username")
-            .password("password")
-            .isLocked(false)
-            .timezones(new Timezones("japan", "japan", Interval.ZERO, false))
-            .currency(new Currency("yen", "yen", "yen", "yen"))
-            .oauthProvider(null)
-            .createdTime(LocalDateTime.now())
-            .updatedTime(LocalDateTime.now())
-            .tasks(Collections.emptyList())
-            .failedAuths(Collections.emptyList())
-            .build();
+    @PostConstruct
+    public void init() {
+        try {
+            this.testAccount = this.accountRepo.findById(1L).block();
+        } catch (final Exception e) {
+            log.warn(e.getLocalizedMessage());
+            this.testAccount = Account.builder().id(1L)
+                .username("username")
+                .password("password")
+                .isLocked(false)
+                .timezones(new Timezones("japan", "japan", Interval.ZERO, false))
+                .currency(new Currency("yen", "yen", "yen", "yen"))
+                .oauthProvider(null)
+                .createdTime(LocalDateTime.now())
+                .updatedTime(LocalDateTime.now())
+                .tasks(Collections.emptyList())
+                .failedAuths(Collections.emptyList())
+                .build();
+
+        }
     }
 
 }

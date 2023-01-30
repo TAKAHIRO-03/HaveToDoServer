@@ -12,13 +12,19 @@ import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import static jp.co.havetodo.AbstractContainerBaseTest.postgresqlContainer;
 
 
 @Slf4j
 @DataR2dbcTest
 @Import({TestConfig.class})
-@TestPropertySource("classpath:application-test.yml")
+@TestPropertySource("classpath:application.yml")
+@Testcontainers
 public class AccountRepositoryTest {
 
     @Autowired
@@ -26,6 +32,16 @@ public class AccountRepositoryTest {
 
     @Autowired
     private AccountRepository accountRepo;
+
+    @DynamicPropertySource
+    static void postgresqlProperties(final DynamicPropertyRegistry registry) {
+        registry.add("spring.r2dbc.url", () -> "r2dbc:postgresql://"
+                + postgresqlContainer.getHost() + ":"
+                + postgresqlContainer.getFirstMappedPort()
+                + "/" + postgresqlContainer.getDatabaseName());
+        registry.add("spring.r2dbc.username", () -> postgresqlContainer.getUsername());
+        registry.add("spring.r2dbc.password", () -> postgresqlContainer.getPassword());
+    }
 
     @BeforeAll
     public static void setup(@Autowired final R2dbcEntityTemplate template) throws Exception {
@@ -42,7 +58,7 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    public void テスト() throws Exception {
+    public void test() throws Exception {
         this.accountRepo.findAll().log().collectList().block().forEach(System.out::println);
     }
 
