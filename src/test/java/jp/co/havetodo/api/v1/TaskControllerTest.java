@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import io.r2dbc.postgresql.codec.Interval;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -19,16 +18,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import jp.co.havetodo.api.mapper.TaskMapper;
-import jp.co.havetodo.api.mapper.TaskMapperImpl;
 import jp.co.havetodo.api.payload.request.TaskRequest;
-import jp.co.havetodo.domain.model.Account;
-import jp.co.havetodo.domain.model.Currency;
 import jp.co.havetodo.domain.model.Task;
-import jp.co.havetodo.domain.model.Timezones;
 import jp.co.havetodo.domain.repo.AccountRepository;
 import jp.co.havetodo.filter.log.LoggingFilter;
 import jp.co.havetodo.service.TaskService;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -68,7 +64,7 @@ public class TaskControllerTest {
 
         @Bean
         TaskMapper taskMapper() {
-            return new TaskMapperImpl();
+            return Mappers.getMapper(TaskMapper.class);
         }
 
 

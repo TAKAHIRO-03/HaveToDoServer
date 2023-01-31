@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -60,12 +61,27 @@ public class LoggingFilter implements WebFilter {
     private String replacePasswordToAsterisk(final String body) {
         try {
             final var reqBodyAsJson = this.objMapper.readValue(body, JsonNode.class);
+
+            // for password
             final var password = reqBodyAsJson.get("password").asText();
-            final var tmp = new StringBuilder();
+            final var asterisks = new StringBuilder();
             for (int i = 0, len = password.length(); i < len; i++) {
-                tmp.append("*");
+                asterisks.append("*");
             }
-            ((ObjectNode) reqBodyAsJson).put("password", tmp.toString());
+            ((ObjectNode) reqBodyAsJson).put("password", asterisks.toString());
+
+            // for confirmPassword
+            final var confirmPassword =
+                reqBodyAsJson.has("confirmPassword") ? reqBodyAsJson.get("confirmPassword")
+                    .asText() : null;
+            if (Objects.nonNull(confirmPassword)) {
+                asterisks.delete(0, asterisks.length());
+                for (int i = 0, len = confirmPassword.length(); i < len; i++) {
+                    asterisks.append("*");
+                }
+                ((ObjectNode) reqBodyAsJson).put("confirmPassword", asterisks.toString());
+            }
+
             return reqBodyAsJson.toString();
         } catch (final JsonProcessingException e) {
             log.error("Catch LoggingFilter.filter", e);
